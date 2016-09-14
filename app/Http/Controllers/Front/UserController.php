@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {   
@@ -75,7 +76,9 @@ class UserController extends Controller
     }
     
     /**
-     * 
+     * @func profile
+     * @desc This function will show client profile on the basis of client master id
+     * @param int clientMasterId
      * @return null
      */
     public function profile (Request $request) {
@@ -88,10 +91,121 @@ class UserController extends Controller
             return redirect('/');
         }
     }
-    
+    /**
+     * @func logout
+     * @desc This function will be used for ending client session
+     * @return null
+     */
     public function logout () {
         Session::forget('client_session');
         Session::flush();
         return redirect('/');
     }
+    
+    /**
+     * @func displayMyAllProperty
+     * @desc This function will be used to show tcf-list of a client 
+     * @return null
+     */
+    public function displayMyAllProperty () {
+        $s3 = Storage::disk('s3'); 
+        echo '<pre>'; 
+        print_r(get_class_methods($s3)); 
+        echo '<pre/>';
+        $s3->put('customer/profilepic/abc.txt','My name is Gulloooo.','public');
+        print_r($s3->allFiles('customer/profilepic'));
+        exit();
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        
+        if (isset($ClientId) && !empty($ClientId)) {
+            $result = self::apiRequest('/my-properties', 'GET', array('ClientId' => $ClientId));
+            return view('application.user.my-properties')->with('data',$result);
+        }else {
+            return redirect('/logout');
+        }
+    }
+    /**
+     * 
+     * @func displayMyPaymentSchedule
+     * @desc This function will be used to show a particular tcf payement schedule
+     */
+    public function displayMyPaymentSchedule (Request $request) {
+        if ($request->ajax()) {
+            $inputData = Input::all();
+            $clientId = $inputData['clientId'];
+            $tcfId = $inputData['tcfId'];
+            if ((isset($clientId) && !empty($clientId)) && (isset($tcfId) && !empty($tcfId))) {
+                $result = self::apiRequest('/my-payment-schedule', 'GET', array('clientId' => $clientId, 'tcfId' => $tcfId));
+                $data = view('application.user.my-payment-schedule')->with('data',$result);
+                echo $data; exit();
+            }
+        }
+    }
+    
+    public function displayMyLoan (Request $request) {
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        
+        if (isset($ClientId) && !empty($ClientId)) {
+            $result = self::apiRequest('/my-loans', 'GET', array('ClientId' => $ClientId));
+            return view('application.user.my-loans')->with('data',$result);
+        }else {
+            return redirect('/logout');
+        }
+    }
+    
+    public function displayMyCreditNotes () {
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        $cmId = Session::get('client_session.0.0.CMId'); //client id
+        
+        if (isset($ClientId) && !empty($ClientId)) {
+            $result = self::apiRequest('/my-credit-notes', 'GET', array('clientId' => $ClientId, 'cmId' => $cmId));
+            return view('application.user.my-credit-notes')->with('data',$result);
+        }else {
+            return redirect('/logout');
+        }
+    }
+    
+    public function updateMyProfile (Request $request) {
+        $cmId = Session::get('client_session.0.0.CMId');
+        if ($request->ajax()) {
+            $inputData = Input::all();
+            //print_r($inputData); exit();
+            if (isset($cmId) && !empty($cmId)) {
+                $result = self::apiRequest('/update-my-profile/'.$cmId, 'PUT', $inputData);
+                return $result;
+            }
+        }
+    }
+    
+    public function updateMyProfilePic (Request $request) {
+        $cmId = Session::get('client_session.0.0.CMId');
+        $inputData = Input::all();     
+        if ($request->ajax()) {
+            if(Input::hasFile('CImage')) {
+                $fileObj = Input::file('CImage');
+                $ruleArr = array('CImage' => 'mimes:jpeg,bmp,png,gif|min:100|max:2048');
+                $validator = Validator::make($inputData, $ruleArr);
+                
+                if ($validator->fails())
+                 {
+                   $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+                 }else {
+                       $fileName = self::uploadFiles($fileObj,$cmId,'customer/profilepic/');
+                    if (isset($fileName) && !empty($fileName)) {
+                        $result = self::apiRequest('/update-my-profile-pic/'.$cmId, 'POST', array('CImage' => $fileName));
+                        return $result;
+                    }
+                }    
+            }
+        }
+    }
+    
+    
+    
 }

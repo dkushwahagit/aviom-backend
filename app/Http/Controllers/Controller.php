@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 abstract class Controller extends BaseController
 {
@@ -65,5 +66,14 @@ abstract class Controller extends BaseController
             return false;
         }
         return true;
+    }
+    
+    public static function uploadFiles ($file = null,$fileName = null, $location = 'customer/profilepic/') {
+        $extension = $file->getClientOriginalExtension();
+        $filename = $fileName.'.'.$extension;
+        $resp = Storage::disk('s3')->put($location.$filename, file_get_contents($file), 'public');
+        if ($resp) {  // return true on success
+          return $filename; 
+        }
     }
 }
