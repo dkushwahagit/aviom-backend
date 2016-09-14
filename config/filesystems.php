@@ -55,12 +55,12 @@ return [
         ],
 
         's3' => [
-            'driver' => 's3',
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'your-region',
-            'bucket' => 'your-bucket',
-        ],
+			'driver' => 's3',
+			'key'    => 'AKIAIW6PYHTBEKF6PTOA',
+			'secret' => 'DU2nU7XYDPXczyhfBDRh+qTGiWTBUMjfRZsEpYz0',
+			'region' => 'ap-southeast-1',
+			'bucket' => 'sqy',
+		],
 
     ],
 
