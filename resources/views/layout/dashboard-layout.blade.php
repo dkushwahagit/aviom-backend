@@ -21,6 +21,7 @@
 
 <script src="{{ asset("assets/lib/js/jquery-1.12.3.min.js") }}"></script> 
 <script src="{{ asset("assets/lib/js/bootstrap.min.js") }}" type="text/javascript"></script> 
+<script src="{{ asset("assets/js/common.js") }}" type="text/javascript"></script>
 @stack('scripts')
 </body>
 </html>

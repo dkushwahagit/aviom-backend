@@ -19,6 +19,9 @@
               <div class="circul">
                 <figure> <img src="assets/images/user-pic.png" alt="" class="img-circle img-responsive"> </figure>
               </div>
+                <form method="post" action="" enctype="multipart/form-data" id="profile-pic-form">
+                    <input type="file" class="form-control-file" id="Profiling" aria-describedby="fileHelp" name="CImage" style="display: none;">
+                </form>
             </div>
             <div class="userName">
               <p>{{ $data['RESPONSE_DATA']['CName']}}</p>
@@ -32,15 +35,16 @@
             </div>
             <div class="socialSection"> <a href="javascript:void(0)"><em class="fa fa-facebook-square"></em></a> <a href="javascript:void(0)"> <em class="fa fa-linkedin-square"></em></a> </div>
             <div class="dvider"></div>
-            <a class="editBtn" href="javascript:void(0)">edit profile</a> </div>
+            <a class="editBtn profile-btn" href="javascript:void(0)" role="button">edit profile</a> </div>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-          <div class="formBox">
+            <form method="post" action="" enctype="multipart/form-data" id="profile-form">  
+                <div class="formBox">
             <div class="row">
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-my-profile"></em>Pan No</label>
-                  <input type="text" id="PanNo" class="form-control" placeholder="Enter pan no" name="PanNo" value="{{ $data['RESPONSE_DATA']['PanNo']}}">
+                  <input type="text" id="PanNo" class="form-control" disabled="disabled" placeholder="Enter pan no" name="PanNo" value="{{ $data['RESPONSE_DATA']['PanNo']}}">
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -76,7 +80,7 @@
                   <label>
                   <em class="icon-city"></em>Permanente City
                   <div class="checkBoxx">
-                    <input type="checkbox" value="">
+                      <input type="checkbox" value="" id="cityAsAbove" onchange="if($(this).prop('checked') == true){ $('#PermanentCity').val($('#City').val());}">
                   </div>
                   <span>same as above </span>
                   </label>
@@ -88,7 +92,7 @@
                   <label>
                   <em class="icon-address"></em>Permanente Address
                   <div class="checkBoxx">
-                    <input type="checkbox" value="">
+                    <input type="checkbox" value="" id="addressAsAbove" onchange="if($(this).prop('checked') == true){ $('#PermanentAddress').val($('#Address').val());}">
                   </div>
                   <span>same as above </span>
                   </label>
@@ -173,8 +177,8 @@
             <div class="row">
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
-                  <label><em class="icon-upload"></em>Upload Profile Picture</label>
-                  <input type="file" class="form-control-file" id="Profiling" aria-describedby="fileHelp" name="Profiling" >
+                  {{-- <label><em class="icon-upload"></em>Upload Profile Picture</label> --}}
+                  
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -195,6 +199,7 @@
               </div>
             </div>
           </div>
+            </form>
         </div>
       </div>
     </div>

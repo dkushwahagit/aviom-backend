@@ -1,6 +1,6 @@
 @extends('layout.dashboard-layout')
 
-@section('title', 'My Profile')
+@section('title', 'My Loans')
 
 @push('styles')
 <link href="{{asset('assets/css/my-profile.css')}}" rel="stylesheet" type="text/css">
@@ -8,194 +8,43 @@
 
 @section('content')
 
-  
   <div class="rightBox">
-    <h1>My Profile</h1>
-    <div class="profileBox">
-      <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <div class="imgBox">
-            <div class="userImg">
-              <div class="circul">
-                <figure> <img src="assets/images/user-pic.png" alt="" class="img-circle img-responsive"> </figure>
-              </div>
-            </div>
-            <div class="userName">
-              <p>{{ $data['RESPONSE_DATA']['CName']}}</p>
-              <div class="cameraIcon"> <a href="javascript:void(0)"><em class="fa fa-camera"></em></a> </div>
-            </div>
-            <div class="information">
-              <ul>
-                <li><em class="icon-mobile"></em> {{ $data['RESPONSE_DATA']['MobileNo']}}</li>
-                <li><em class="icon-email"></em> {{ $data['RESPONSE_DATA']['EmailId']}}</li>
-              </ul>
-            </div>
-            <div class="socialSection"> <a href="javascript:void(0)"><em class="fa fa-facebook-square"></em></a> <a href="javascript:void(0)"> <em class="fa fa-linkedin-square"></em></a> </div>
-            <div class="dvider"></div>
-            <a class="editBtn" href="javascript:void(0)">edit profile</a> </div>
-        </div>
-        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-          <div class="formBox">
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-my-profile"></em>Pan No</label>
-                  <input type="text" id="PanNo" class="form-control" placeholder="Enter pan no" name="PanNo" value="{{ $data['RESPONSE_DATA']['PanNo']}}">
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-mobile"></em>Alternate Mobile No</label>
-                  <input type="text" id="AlternateMobileNo" class="form-control" placeholder="Enter alternate mobile no" name="AlternateMobileNo" value="{{ $data['RESPONSE_DATA']['AlternateMobileNo']}}">
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-email"></em>Alternate Email ID</label>
-                  <input type="text" id="AlternateEmailId" class="form-control" placeholder="Enter alternate emial id" name="AlternateEmailId" value="{{ $data['RESPONSE_DATA']['AlternateEmailId']}}" >
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-city"></em>Current City </label>
-                  <input type="text" id="City" class="form-control" placeholder="Enter current city" name="City" value="{{ $data['RESPONSE_DATA']['City']}}" >
-                </div>
-              </div>
-              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-address"></em>Current Address</label>
-                  <input type="text" id="Address" class="form-control" placeholder="Enter current  address" name="Address" value="{{ $data['RESPONSE_DATA']['Address']}}" >
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                <div class="form-group">
-                  <label>
-                  <em class="icon-city"></em>Permanente City
-                  <div class="checkBoxx">
-                    <input type="checkbox" value="">
-                  </div>
-                  <span>same as above </span>
-                  </label>
-                  <input type="text" id="PermanentCity" class="form-control" placeholder="Enter permanente city"  name="PermanentCity" value="{{ $data['RESPONSE_DATA']['PermanentCity']}}" >
-                </div>
-              </div>
-              <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-                <div class="form-group">
-                  <label>
-                  <em class="icon-address"></em>Permanente Address
-                  <div class="checkBoxx">
-                    <input type="checkbox" value="">
-                  </div>
-                  <span>same as above </span>
-                  </label>
-                  <input type="text" id="PermanentAddress" class="form-control" placeholder="Enter permanent address" name="PermanentAddress" value="{{ $data['RESPONSE_DATA']['PermanentAddress']}}">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-occupation"></em>Occupation Type</label>
-                  <?php 
-                       $occupationArr = array (
-                                          'E'  => 'Salary', 
-                                          'SE' => 'Business/Self Employed',
-                                        );
-                       ?>
-                  <select class="form-control" id="OccupationType" name="OccupationType">
-                  @foreach ($occupationArr as $k => $v)    
-                    <option value="{{ $k }}" {{ ($k == $data['RESPONSE_DATA']['OccupationType'])?'selected':'' }}>{{$v}}</option>
-                  @endforeach  
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-designation"></em>Designation</label>
-                  <input type="text" id="Designation" class="form-control" placeholder="Enter designation" name="Designation" value="{{$data['RESPONSE_DATA']['Designation']}}" >
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-company--name"></em>Company Name</label>
-                  <input type="text" id="CompanyName" class="form-control" placeholder="Enter company name" name="CompanyName" value="{{$data['RESPONSE_DATA']['CompanyName']}}" >
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-gross-salary"></em>Gross Salary (Monthly)</label>
-                  <input type="text" id="GrossSalary" class="form-control" placeholder="Enter gross salary" name="GrossSalary" value="{{$data['RESPONSE_DATA']['GrossSalary']}}" >
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-other-rental-income"></em>Other/Rental Income (Monthly)</label>
-                  <input type="text" id="OtherIncome" class="form-control" placeholder="0" name="OtherIncome" value="{{$data['RESPONSE_DATA']['OtherIncome']}}">
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-existing-EMI"></em>Existing EMI (Monthly)</label>
-                  <input type="text" id="EMIAmt" class="form-control" placeholder="0" name="EMIAmt" value="{{$data['RESPONSE_DATA']['EMIAmt']}}">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="row">
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="form-group">
-                      <label><em class="icon-dob"></em>Date of Birth</label>
-                      <input type="text" id="DOB" class="form-control" placeholder="Enter date of birth" value="{{$data['RESPONSE_DATA']['DOB']}}" name="DOB">
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="form-group">
-                      <label><em class="icon-dob"></em>Anniversary Date</label>
-                      <input type="text" id="AnniversaryDate" class="form-control" placeholder="Enter anniversary date" name="AnniversaryDate" value="{{$data['RESPONSE_DATA']['AnniversaryDate']}}">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-remark"></em>Tell Us More About You</label>
-                  <textarea class="form-control"></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="icon-upload"></em>Upload Profile Picture</label>
-                  <input type="file" class="form-control-file" id="Profiling" aria-describedby="fileHelp" name="Profiling" >
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="fa fa-facebook"></em>Facebook Profile Link</label>
-                  <div class="input-group"> <span class="input-group-addon" id="sizing-addon1"><em class="fa fa-facebook"></em></span>
-                      <input type="text" id="FBLink" class="form-control" aria-describedby="sizing-addon2" name="FBLink" value="{{$data['RESPONSE_DATA']['FBLink']}}">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <div class="form-group">
-                  <label><em class="fa fa-linkedin"></em>LinkedIn Profile Link</label>
-                  <div class="input-group"> <span class="input-group-addon" id="sizing-addon2"><em class="fa fa-linkedin"></em></span>
-                    <input type="text" id="LinkedInLink" class="form-control" aria-describedby="sizing-addon2" name="LinkedInLink" value="{{$data['RESPONSE_DATA']['LinkedInLink']}}">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <h1>My Loans</h1>
+    <div class="containerBox">
+      <div class="table-responsive">
+          @if (isset($data['RESPONSE_DATA']) && !empty($data['RESPONSE_DATA']))
+            <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Customer Name</th>
+              <th>Bank</th>
+              <th>Date</th>
+              <th>Loan Amount</th>
+              <th>Sanctioned Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody> 
+             @foreach ($data['RESPONSE_DATA'] as $k => $v) 
+        
+            <tr>
+              <td>{{++$k}}</td>
+              <td>{{ $v['Name'] }}</td>
+              <td>{{ $v['bankName'] }}</td>
+              <td>{{ $v['mcfSubmissionDate'] }}</td>
+              <td>{{ $v['loanAmount'] or '0' }}</td>
+              <td>{{ $v['sanctionedAmount'] or '0' }}</td>
+              <td>{{ $v['status'] }}</td>
+            </tr>
+                   
+             @endforeach
+              </tbody>
+        </table>
+          @else
+      <div class="alert alert-danger">No records found ! </div>
+          @endif 
+          
       </div>
     </div>
   </div>
@@ -205,4 +54,5 @@
 
 @push('scripts')
     <script src="{{ asset("assets/js/function.js") }}" type="text/javascript"></script>
+    <script src="{{ asset("assets/js/common.js") }}" type="text/javascript"></script>
 @endpush

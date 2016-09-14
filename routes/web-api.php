@@ -15,4 +15,10 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::post('/user/register','UserController@register');
     Route::get('/verify-password','UserController@verifyPassword');
     Route::get('/profile/{clientMasterId}','UserController@profile');
+    Route::get('/my-properties', 'UserController@displayAllProperty');
+    Route::get('/my-payment-schedule', 'UserController@displayPaymentSchedule');
+    Route::get('/my-loans', 'UserController@displayMyLoan');
+    Route::get('/my-credit-notes', 'UserController@displayMyCreditNotes');
+    Route::put('/update-my-profile/{cmId}', 'UserController@updateMyProfile');
+    Route::post('/update-my-profile-pic/{cmId}','UserController@updateMyProfilePic');
 });
