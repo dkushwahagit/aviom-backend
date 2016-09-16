@@ -65,7 +65,7 @@ class UserController extends Controller
                         return redirect('/')->with('error','session error !');
                     }
                 }else {
-                     return redirect()->back()->withErrors('error','Invalid user credentials');
+                     return redirect()->back()->withErrors(['error' => 'Invalid user credentials']);
                 }    
                 
                 
@@ -83,6 +83,7 @@ class UserController extends Controller
      */
     public function profile (Request $request) {
         $clientMasterId = Session::get('client_session.0.0.CMId'); //client master id
+        //print_r(Session::get('client_session'));exit;
         if (isset($clientMasterId) && !empty($clientMasterId)) {
             $result = self::apiRequest('/profile/'.$clientMasterId, 'GET');
             
@@ -199,6 +200,8 @@ class UserController extends Controller
                        $fileName = self::uploadFiles($fileObj,$cmId,'customer/profilepic/');
                     if (isset($fileName) && !empty($fileName)) {
                         $result = self::apiRequest('/update-my-profile-pic/'.$cmId, 'POST', array('CImage' => $fileName));
+                        Session::forget('client_session.0.0.CImage');
+                        Session::put('client_session.0.0.CImage',$result['RESPONSE_DATA']['fileName']);
                         return $result;
                     }
                 }    
@@ -206,6 +209,11 @@ class UserController extends Controller
         }
     }
     
+    public function displayExclusiveDeals ($cityid = null) {
+         $result = self::apiRequest('/exclusive-deals', 'GET',array('cityid' => $cityid, 'limit' => '12'));
+         $city   = self::apiRequest('/city-list', 'GET');
+         return view('application.user.exclusive-deals')->with('data',$result)->with('city',$city['cityList']);
+    }
     
     
 }

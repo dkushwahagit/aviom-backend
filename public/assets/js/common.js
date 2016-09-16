@@ -59,10 +59,11 @@ $(function(){
                                        
                             }else{
                                 var imge =  data.RESPONSE_DATA.fileName;
+                                
                                 if (imge != undefined) {
                                     var src = 'https://s3-ap-southeast-1.amazonaws.com/sqy/customer/profilepic/'+imge;
-                                    $('.circul > figure > img').attr('src',src);
-                                    $('.userPic > img').attr('src',src);
+                                    $('.circul > figure > img').prop('src',src);
+                                    $('.userPic > img').prop('src',src);
                                 }
                            }
                            
@@ -101,11 +102,12 @@ $(function(){
                                         var msg = '<div class="alert alert-success">Profile Updated Successfully. </div>';
                                         $(msg).appendTo(modalBody);
                                         $('#msg').modal();
-                                       
+                                       setTimeout(function () { window.location.reload(); },2000);
                                     }else {
                                         var msg = '<div class="alert alert-danger">Profile Could Not Be Updated . </div>';
                                         $(msg).appendTo(modalBody);
                                         $('#msg').modal();
+                                        
                                     }
                     },
                     error      : function (jqXHR,statusText,errorThrown) {alert(errorThrown);},

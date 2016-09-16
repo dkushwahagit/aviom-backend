@@ -12,6 +12,7 @@ use App\Model\ClientMasterModel;
 use Illuminate\Support\Facades\Storage;
 use Validator;
 use DB;
+use Ixudra\Curl\Facades\Curl;
 
 class UserController extends Controller
 {
@@ -56,7 +57,7 @@ class UserController extends Controller
                    ->whereRaw('clientlogin.Password = AES_ENCRYPT("'.$inputData['password'].'","mysquareyards")')
                    ->leftJoin('clientmaster', 'clientlogin.CMId', '=', 'clientmaster.CMId')
                    ->select('clientlogin.ClientLoginId','clientlogin.UserName','clientlogin.ClientId','clientlogin.CMId',
-                            'clientmaster.CName','clientmaster.City','clientmaster.CountryName')
+                            'clientmaster.CName','clientmaster.City','clientmaster.CountryName','clientmaster.CImage')
                    ->get();
         $records = collect($records)->all();
         //return $records;
@@ -350,4 +351,22 @@ class UserController extends Controller
         return $result;    
     }
     
+    public function displayExclusiveDeals (Request $request) {
+        $inputData = Input::all();
+        $to = 'http://api.squareyards.com/SquareYards/site/city/projectinfocus'; 
+        $curlReqObj = Curl::to($to);
+       if (isset($inputData) && !empty($inputData)) {
+             $curlReqObj = $curlReqObj->withData($inputData);
+        }
+        $response = $curlReqObj->withTimeout(config('app.DEFAULT_CURL_TIMEOUT'))->get();
+        return json_decode($response,1);
+    }
+    
+    
+    public function cityList (Request $request) {
+        $to = 'http://api.squareyards.com/SquareYards/site/mobile/citylist'; 
+        $curlReqObj = Curl::to($to);
+        $response = $curlReqObj->withTimeout(config('app.DEFAULT_CURL_TIMEOUT'))->get();
+        return json_decode($response,1);
+    }
 }

@@ -14,10 +14,16 @@
     <div class="profileBox">
       <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <?php 
+             $img = Session::get('client_session.0.0.CImage');
+             $isExists = Illuminate\Support\Facades\Storage::disk('s3')
+                     ->exists('/customer/profilepic/'.$img); 
+             $src = ($isExists)?'https://s3-ap-southeast-1.amazonaws.com/sqy/customer/profilepic/'.$img:asset('/images/default.png');
+             ?>
           <div class="imgBox">
             <div class="userImg">
               <div class="circul">
-                <figure> <img src="assets/images/user-pic.png" alt="" class="img-circle img-responsive"> </figure>
+                <figure> <img src="{{ $src }}" alt="" class="img-circle img-responsive"> </figure>
               </div>
                 <form method="post" action="" enctype="multipart/form-data" id="profile-pic-form">
                     <input type="file" class="form-control-file" id="Profiling" aria-describedby="fileHelp" name="CImage" style="display: none;">

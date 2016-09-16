@@ -1,6 +1,13 @@
 <div class="leftBox">
     <div class="userSection">
-      <div class="userPic"><img class="img-responsive img-circle" src="{{ asset('images/default.png') }}" alt="User Pic"/></div>
+        {{-- or asset('images/default.png')  --}}
+        <?php 
+             $img = Session::get('client_session.0.0.CImage');
+             $isExists = Illuminate\Support\Facades\Storage::disk('s3')
+                     ->exists('/customer/profilepic/'.$img); 
+             $src = ($isExists)?'https://s3-ap-southeast-1.amazonaws.com/sqy/customer/profilepic/'.$img:asset('/images/default.png');
+             ?>
+      <div class="userPic"><img class="img-responsive img-circle" src="{{ $src }}" alt="User Pic"/></div>
       <div class="userName">{{ Session::get('client_session.0.0.CName')}}</div>
       <div class="userCity">{{ Session::get('client_session.0.0.City')}}, {{ Session::get('client_session.0.0.CountryName')}}</div>
     </div>
@@ -12,7 +19,7 @@
         <li><a href="service-requests.html"><em class="icon-service-request"></em> <span>Service Requests</span> </a></li>
         <li><a href="{{url('/my-credit-notes')}}"><em class="icon-my-cradit-notes"></em> <span>My Credit Notes</span> </a></li>
         <li><a href="my-referral.html"><em class="icon-my-references"></em> <span>My Referral</span> </a></li>
-        <li><a href="exclusive-deals.html"><em class="icon-exclusive-deal"></em> <span>Exclusive Deals</span> </a></li>
+        <li><a href="{{ url('/exclusive-deals') }}"><em class="icon-exclusive-deal"></em> <span>Exclusive Deals</span> </a></li>
         <li><a href="{{url('/logout')}}"><em class="icon-logout"></em> <span>Logout</span></a></li>
       </ul>
     </nav>

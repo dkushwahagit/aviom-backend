@@ -22,6 +22,7 @@
     Route::get('/my-credit-notes', 'UserController@displayMyCreditNotes');
     Route::put('/update-my-profile', 'UserController@updateMyProfile');
     Route::post('/update-my-profile-pic','UserController@updateMyProfilePic');
+    Route::get('/exclusive-deals/{cityid?}', 'UserController@displayExclusiveDeals');
   });  
   
   Route::match(['get','post'],'/','UserController@login');
