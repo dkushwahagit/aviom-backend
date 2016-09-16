@@ -109,13 +109,6 @@ class UserController extends Controller
      * @return null
      */
     public function displayMyAllProperty () {
-        $s3 = Storage::disk('s3'); 
-        echo '<pre>'; 
-        print_r(get_class_methods($s3)); 
-        echo '<pre/>';
-        $s3->put('customer/profilepic/abc.txt','My name is Gulloooo.','public');
-        print_r($s3->allFiles('customer/profilepic'));
-        exit();
         $ClientId = Session::get('client_session.0.0.ClientId'); //client id
         
         if (isset($ClientId) && !empty($ClientId)) {
