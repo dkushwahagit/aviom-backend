@@ -18,7 +18,7 @@
              $img = Session::get('client_session.0.0.CImage');
              $isExists = Illuminate\Support\Facades\Storage::disk('s3')
                      ->exists('/customer/profilepic/'.$img); 
-             $src = ($isExists)?'https://s3-ap-southeast-1.amazonaws.com/sqy/customer/profilepic/'.$img:asset('/images/default.png');
+             $src = ($isExists && !empty($img) && isset($img))?'https://s3-ap-southeast-1.amazonaws.com/sqy/customer/profilepic/'.$img:asset('/images/default.png');
              ?>
           <div class="imgBox">
             <div class="userImg">
