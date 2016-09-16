@@ -73,8 +73,14 @@
                      }
                    ?>  
                   <figure> <em class="icon-heart-line active"></em> <img src="{{$src}}" alt="associated-developers-logo" class="img-responsive">
-                    <div class="txt-mask"> <a href="javascript:void()"> <span>{{$v['projectName']}}</span></a>
-                      <p><small>{{ $v['subLocation'][0]['locationName'] or ''}}</small>, <small>{{ $v['cityName']}}</small></p>
+                      <?php 
+                      $projectName = strtolower($v['projectName']);
+                      $projectName = str_replace(' ','-', $projectName);
+                      $projectUrl = "http://squareyards.com/".strtolower($v['cityName'])."-residential-property/$projectName/".$v['projectId']."/project";
+                      ?>
+                    <div class="txt-mask"> <a href="{{$projectUrl}}" target="_blank"> <span>{{$v['projectName']}}</span></a>
+                      
+                        <p><small>{{ $v['subLocation'][0]['locationName'] or ''}}</small>, <small>{{ $v['cityName']}}</small></p>
                     </div>
                   </figure>
                   <div class="clearfix">
@@ -109,7 +115,7 @@
                   <div class="buttonBox2">
                     <ul>
                       <li> <a class="unit" href="javascript:void(0)"><em class="fa fa-th" ></em> Units</a> </li>
-                      <li> <a href="javascript:void(0)">Interested?</a> </li>
+                      <li> <a href="{{$projectUrl}}" target="_blank">Detail</a> </li>
                     </ul>
                   </div>
                 </div>
@@ -117,8 +123,14 @@
                   <div class="close"><em class="fa fa-times"></em></div>
                   
                   <ul>
+                   <?php $unitUrl = "http://squareyards.com/".strtolower($v['cityName'])."-residential-property/";?>   
                   @foreach($v['unit'] as $unit)
-                    <li><a href="javascript:void(0)"><strong>{{ $unit['bedroomCount']. ' BHK '}} {{ $unit['unitSize'] . ' Sq. Ft. '. $unit['unitCatName']}}</strong></a> <span>{{ $unit['totalLowCostView'] .' - '. $unit['totalHighCostView'] }}</span></li>
+                  <?php
+                    $unitName = strtolower($unit['unitName']);
+                    $unitName = str_replace(' ','-',$unitName);
+                    
+                  ?>
+                  <li><a href="{{$unitUrl.$unitName."/".$v['projectId']."/".$unit['unitId']."/unit"}}" target="_blank"><strong>{{ $unit['bedroomCount']. ' BHK '}} {{ $unit['unitSize'] . ' Sq. Ft. '. $unit['unitCatName']}}</strong></a> <span>{{ $unit['totalLowCostView'] .' - '. $unit['totalHighCostView'] }}</span></li>
                   @endforeach  
                   </ul>
                 </div>

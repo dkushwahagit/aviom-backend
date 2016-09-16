@@ -4,8 +4,8 @@
       <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
         <ul>
           <li>Get in Touch</li>
-          <li><a href="javascript:void(0)"><em class="icon-email"></em> Connetc@mysquareyards</a></li>
-          <li><a href="javascript:void(0)"><em class="icon-mobile"></em> Toll Free: 9999999999</a></li>
+          <li><a href="mailto:connect@squareyards.com"><em class="icon-email"></em> connect@squareyards.com</a></li>
+          <li><a href="javascript:void(0)"><em class="icon-mobile"></em> Toll Free: 1800 208 3344</a></li>
         </ul>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -27,3 +27,38 @@
     </div>
   </div>
 </div>
+
+
+
+
+<div id="reset-password" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">RESET PASSWORD</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <input type="Email" name="" class="form-control" placeholder="EmailId@gmail.com" disabled >
+          </div>
+          <div class="form-group">
+            <input type="password" name="" class="form-control" placeholder="New Password" >
+          </div>
+          <div class="form-group">
+            <input type="password" name="" class="form-control" placeholder="Confirm New Password">
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" class="btn btn-danger pull-right">Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
