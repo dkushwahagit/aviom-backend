@@ -208,5 +208,28 @@ class UserController extends Controller
          return view('application.user.exclusive-deals')->with('data',$result)->with('city',$city['cityList']);
     }
     
+    public function resetPassword (Request $request) {
+        if ($request->isMethod('POST')) {
+             $inputData = Input::all();
+             $inputData['CMId'] = Session::get('client_session.0.0.CMId');
+             $result = self::apiRequest('/reset-password', 'PUT', $inputData);
+             return $result;
+        }
+    }
     
+    public function serviceRequestList () {
+        $cmId = Session::get('client_session.0.0.CMId');
+        $inputData = array ('CMId' => $cmId);
+        $result = self::apiRequest('/service-request-list', 'GET', $inputData);
+        return view('application.user.service-request-list')->with('data',$result);
+        
+    }
+    
+    public function serviceRequestDetails ($cIId = null) {
+        $cmId = Session::get('client_session.0.0.CMId');
+        $inputData = array ('CMId' => $cmId,'CIId' => $cIId);
+        $result = self::apiRequest('/service-request-detail', 'GET', $inputData);
+        return view('application.user.service-request-timeline')->with('data',$result);
+        
+    }
 }

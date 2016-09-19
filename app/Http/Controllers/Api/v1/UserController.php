@@ -117,7 +117,7 @@ class UserController extends Controller
                    ->leftJoin('payment_plan','payment_plan.PPId','=','tcf.PPId')
                    ->select('tcf.TCFID As tcfId','tcf.Size As size','tcf.BSPPerSizeUnit As bspPerUnitSize','tcf.ProductID As productId',
                            'tcf.TotalConsiderationValue As totalCost','tcf.DealClosureDate As dealClosedDate','tcf.PPId As ppId',
-                           'product.ProductName As projectName',
+                           'product.ProductName As projectName','clienttcfxref.ClientID As clientId',
                             'location.name As city','productproperty.PropertyName As unitType',
                            'zref.RefName As measurementUnit','payment_plan.PlanName As paymentPlan')
                    ->get();
@@ -368,5 +368,138 @@ class UserController extends Controller
         $curlReqObj = Curl::to($to);
         $response = $curlReqObj->withTimeout(config('app.DEFAULT_CURL_TIMEOUT'))->get();
         return json_decode($response,1);
+    }
+    
+    public function resetPassword (Request $request) {
+        
+        $inputData = Input::all();
+        $rulesArr = array (
+            'CMId'             => 'required',
+            'password'         => 'required|confirmed',
+            'password_confirmation' => 'required'
+        );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        
+        //$updateData = array('Password' => 'AES_DECRYPT("'.$inputData['password'].'","mysquareyards")');
+        $records = DB::table('clientlogin')
+              ->where('clientlogin.CMId',$inputData['CMId'])
+              ->where('clientlogin.IsActive',1)
+              ->update(['Password' => DB::raw('AES_ENCRYPT("'.$inputData['password'].'","mysquareyards")')]);
+        if ($records == '0' || $records == '1') {
+            $result = array (
+                'ERROR'         => false,
+                'RESPONSE_MSG'  => 'Password Updated Successfully.',
+                'RESPONSE_DATA' => $records
+            );
+        }else {
+            $result = array (
+                'ERROR'         => true,
+                'RESPONSE_MSG'  => 'Could Not Update Password Successfully.',
+                'RESPONSE_DATA' => ''
+            );
+        }
+       
+        return $result;
+    }
+    
+    public function serviceRequestList () {
+        $inputData = Input::all();
+        $rulesArr = array (
+            'CMId' => 'required'
+            );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        $records = DB::select('Select clientinteraction.CIId As CIId, clientinteraction.TicketNo As ticketNo, clientinteraction.ReqSubject As subject,
+                                clientinteraction.Idate As ticketDate, 
+                                Case when ifnull(b.MRefCIId,0)=0 Then clientinteraction.IStatus 
+                                Else (Select IStatus From clientinteraction Where CIId=b.CIId)
+                                End as ticketStatus
+                                From clientinteraction left join 
+                                (Select max(CIId) as CIId,MRefCIId From clientinteraction 
+                                where CMId = "'.$inputData['CMId'].'" group by MRefCIId)b on clientinteraction.CIId=b.MRefCIId
+                                where CMId = "'.$inputData['CMId'].'" And ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 '
+                   );
+        $records = collect($records)->all();
+            if (!empty($records) && isset($records)) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'Data fetched Successfully',
+                    'RESPONSE_DATA' => $records
+                );
+            }else {
+                $result = array (
+                    'ERROR'         => true,
+                    'RESPONSE_MSG'  => 'No Data found',
+                    'RESPONSE_DATA' => ''
+                );
+            }
+        
+        
+        return $result;           
+                   
+    }
+    
+    public function serviceRequestDetails () {
+        $inputData = Input::all();
+        $rulesArr = array (
+            'CMId' => 'required',
+            'CIId' => 'required'
+            );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        $records = DB::select('Select Case when (ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 )
+                               then clientinteraction.Idate else clientinteraction.CreatedDate END As createdDate, clientinteraction.ReqSubject As subject,
+                                clientinteraction.AttachedFile As attachedFile, clientinteraction.InteractionDetails As interactionDetails,
+                                Case when (ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 )
+                                Then "Request" Else case when ifnull(clientinteraction.LoginType,"E")="E" Then "Response" Else "Request" END END As msgIdentity
+                                
+                                From clientinteraction 
+                                where CMId = "'.$inputData['CMId'].'" '
+                . ' And (clientinteraction.CIId = "'.$inputData['CIId'].'" OR ifnull(clientinteraction.MRefCIId,0)="'.$inputData['CIId'].'") '
+                . ' order by createdDate desc'
+                   );
+        $records = collect($records)->all();
+            if (!empty($records) && isset($records)) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'Data fetched Successfully',
+                    'RESPONSE_DATA' => $records
+                );
+            }else {
+                $result = array (
+                    'ERROR'         => true,
+                    'RESPONSE_MSG'  => 'No Data found',
+                    'RESPONSE_DATA' => ''
+                );
+            }
+        
+        
+        return $result;           
+                   
     }
 }
