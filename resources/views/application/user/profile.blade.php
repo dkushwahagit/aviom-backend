@@ -84,7 +84,7 @@
               <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                   <label>
-                  <em class="icon-city"></em>Permanente City
+                  <em class="icon-city"></em>Permanent City
                   <div class="checkBoxx">
                       <input type="checkbox" value="" id="cityAsAbove" onchange="if($(this).prop('checked') == true){ $('#PermanentCity').val($('#City').val());}">
                   </div>
@@ -96,7 +96,7 @@
               <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                   <label>
-                  <em class="icon-address"></em>Permanente Address
+                  <em class="icon-address"></em>Permanent Address
                   <div class="checkBoxx">
                     <input type="checkbox" value="" id="addressAsAbove" onchange="if($(this).prop('checked') == true){ $('#PermanentAddress').val($('#Address').val());}">
                   </div>

@@ -23,4 +23,7 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::post('/update-my-profile-pic/{cmId}','UserController@updateMyProfilePic');
     Route::get('/exclusive-deals', 'UserController@displayExclusiveDeals');
     Route::get('/city-list', 'UserController@cityList');
+    Route::put('/reset-password', 'UserController@resetPassword');
+    Route::get('/service-request-list', 'UserController@serviceRequestList');
+    Route::get('/service-request-detail', 'UserController@serviceRequestDetails');
 });

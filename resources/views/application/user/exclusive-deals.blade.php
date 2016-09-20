@@ -174,22 +174,6 @@ $(document).ready(function(){
 
 
 
-$(document).scroll(function() {
-		var y = $(this).scrollTop();
-		if (y > 0) {   
-			$('.dsePage .dsemapBox').addClass("fixed");
-		} else {	 
-			$('.dsePage .dsemapBox').removeClass("fixed");
-		}  
-		var offset = $('.footerlinkBox').offset().top - $(window).scrollTop();
-		if(offset > window.innerHeight){
-			$('.dsePage .dsemapBox').removeClass("fixed1");	        
-		} else {
-			$('.dsePage .dsemapBox').addClass("fixed1");
-		} 
-});	
-
-
 $(document).ready(function(){		
 	$(".dsePage .filterTypeBox ul li a,.dsePage .filterBtnBox").click(function(){
 	$(".dsePage .viewFilterBox,.dsePage .filterBtnBox").addClass("active");

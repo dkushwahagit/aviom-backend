@@ -1,3 +1,28 @@
+(function( $ ) {
+$.fn.loader = function(action){
+       if (action === 'open') {
+           var content = '<div style="position:absolute;margin:-10px 0 0 -100px;left: 50%;top: 50%;width: 200px;height: 100px;z-index: 2;background:#000;color:#fff;font-weight:bolder;text-align:center"><img src="'+window.location.origin+'/images/1.gif" /></div>';
+           $('<div id="myLoader">'+content+'</div>')
+            .appendTo('body')
+            .css({
+                        width:"100%",
+                        height:window.screen.availHeight+"px",
+                        position:"fixed",
+                        "z-index":1,
+                        left:0,
+                        top:0,
+                        "background-color":"rgba(0,0,0, 0.9)",
+                        "overflow-x":"hidden",
+                        transition:"0.5s"
+                    });
+       }
+       if (action === 'close') {
+           $('#myLoader').detach();
+           
+       }
+};
+}(jQuery));
+
 $(function(){
     var siteUrl = window.location.origin;
     $('a.payment-plan').on('click', function (event) {
@@ -75,6 +100,7 @@ $(function(){
     });
     
     $('a.profile-btn').click(function () {
+                $.fn.loader('open');
                 var postDataObj = {};
                 var formObj = $('#profile-form').serializeArray();
                 $(formObj).each(function (index,v) {
@@ -97,7 +123,7 @@ $(function(){
                     beforeSend : function () {},
                     success    : function (data,statusText,jqXHR) { 
                                 
-                                
+                                $.fn.loader('close');
                                     if (data.ERROR === false) {
                                         var msg = '<div class="alert alert-success">Profile Updated Successfully. </div>';
                                         $(msg).appendTo(modalBody);
@@ -109,6 +135,7 @@ $(function(){
                                         $('#msg').modal();
                                         
                                     }
+                                    
                     },
                     error      : function (jqXHR,statusText,errorThrown) {alert(errorThrown);},
                 });
@@ -118,6 +145,56 @@ $(function(){
     $('div.cameraIcon').click(function (e) {
       $('#Profiling').click();
       
+    });
+    
+    $('#reset-password-form').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            async      : false,
+            url        : window.location.origin+'/reset-password',
+            type       : 'POST',
+            data       : $(this).serialize(),
+            beforeSend : function () {$.fn.loader('open');},
+            success    : function (data,statusText,jqXHR) {
+                            if(data.ERROR == false) {
+                                var msg = '<div class="alert alert-success">'+data.RESPONSE_MSG+'</div>';
+                                $(msg).insertBefore('#reset-password-form');
+                            }else{
+                                var msg = '<ul class="alert alert-danger">';
+                                $.each(data.RESPONSE_MSG,function (index,err) {
+                                    msg = msg+'<li>'+err+'</li>';
+                                });
+                                $(msg).insertBefore('#reset-password-form');
+                            }
+                            $('#reset-form').trigger('click');
+                            $.fn.loader('close');
+                            setTimeout(function () {
+                                    $('.alert').detach();
+                                },2000);
+                         },
+            error      : function (jqXHR,statusText,errorThrown) {
+                          alert(errorThrown);
+            }
+        });
+    });
+    
+    $('.ticket-interaction').click(function (e) {
+        e.preventDefault();
+        var parentTr = $(this).parents('tr');
+        var ciid = $(this).data('interactionId');
+        $.ajax({
+            async    : false,
+            url      : window.location.origin+'/service-request-detail/'+ciid,
+            beforeSend : function () { $.fn.loader('open');if($('.timelineBox').length > 0) { $('.timelineBox').detach(); }},
+            success  : function (data,statusText,jqXHR) {
+                           //alert(data);
+                           $(data).insertAfter('.table-responsive');
+                           $.fn.loader('close');
+            },
+            error    : function (jqXHR,statusText,errorThrown) {
+                alert(errorThrown);
+            }
+        });
     });
    
 });

@@ -39,7 +39,7 @@
                       <td>{{$v['size']}} {{$v['measurementUnit']}}</td>
                       <td>{{$v['bspPerUnitSize']}} {{$v['measurementUnit']}}</td>
                       <td>{{$v['totalCost']}}</td>
-                      <td>{{$v['dealClosedDate']}}</td>
+                      <td>{{date('M Y',strtotime($v['dealClosedDate']))}}</td>
                       <td><a href="javascript:void(0)" @if(isset($v['paymentPlan']) && !empty($v['paymentPlan']))  class="payment-plan" data-tcf-id="{{$v['tcfId']}}" data-client-id="{{$v['clientId']}}" @endif >{{ (isset($v['paymentPlan']) && !empty($v['paymentPlan']))?$v['paymentPlan']:'N/A' }} <em class="fa fa-angle-down"></em></a></td>
                     </tr>
                 @endforeach        

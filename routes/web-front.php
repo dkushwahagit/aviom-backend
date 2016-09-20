@@ -23,6 +23,9 @@
     Route::put('/update-my-profile', 'UserController@updateMyProfile');
     Route::post('/update-my-profile-pic','UserController@updateMyProfilePic');
     Route::get('/exclusive-deals/{cityid?}', 'UserController@displayExclusiveDeals');
+    Route::post('/reset-password', 'UserController@resetPassword');
+    Route::get('/service-request-list', 'UserController@serviceRequestList');
+    Route::get('/service-request-detail/{cIId}', 'UserController@serviceRequestDetails');
   });  
   
   Route::match(['get','post'],'/','UserController@login');

@@ -28,12 +28,12 @@
                           <td>{{$v['tcfRefId']}}</td>
                           <td>{{$v['StageName']}}</td>
                           <td>{{$v['PaymentDescription']}}</td>
-                          <td>{{$v['ExpectedDueDate']}}</td>
+                          <td>{{date('d M Y',strtotime($v['ExpectedDueDate']))}}</td>
                           <td>
-                              @if($v['PaymentStatus'] = 'P')
+                              @if($v['PaymentStatus'] == 'P')
                               
                                   Pending
-                               @elseif($v['PaymentStatus'] = 'C')
+                               @elseif($v['PaymentStatus'] == 'C')
                                   Confirmed                                 
                               
                               @endif

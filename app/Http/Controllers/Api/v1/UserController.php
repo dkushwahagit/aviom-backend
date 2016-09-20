@@ -477,11 +477,12 @@ class UserController extends Controller
                                 clientinteraction.AttachedFile As attachedFile, clientinteraction.InteractionDetails As interactionDetails,
                                 Case when (ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 )
                                 Then "Request" Else case when ifnull(clientinteraction.LoginType,"E")="E" Then "Response" Else "Request" END END As msgIdentity
-                                
-                                From clientinteraction 
-                                where CMId = "'.$inputData['CMId'].'" '
+                                ,Case When ifnull(clientinteraction.LoginType,"E")="E" Then e.EmployeeName Else client.Name End As enterBy
+                                From clientinteraction  left join employee e on e.EmployeeId = clientinteraction.CreatedBy
+                                left outer join client on clientinteraction.ClientId=client.ClientID 
+                                where clientinteraction.CMId = "'.$inputData['CMId'].'" '
                 . ' And (clientinteraction.CIId = "'.$inputData['CIId'].'" OR ifnull(clientinteraction.MRefCIId,0)="'.$inputData['CIId'].'") '
-                . ' order by createdDate desc'
+                . ' order by clientinteraction.createdDate desc'
                    );
         $records = collect($records)->all();
             if (!empty($records) && isset($records)) {

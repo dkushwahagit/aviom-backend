@@ -39,20 +39,21 @@
         <h4 class="modal-title">RESET PASSWORD</h4>
       </div>
       <div class="modal-body">
-        <form>
+          <form method="post" action="{{ url('/reset-password')}}" id="reset-password-form">
           <div class="form-group">
             <input type="Email" name="" class="form-control" placeholder="EmailId@gmail.com" disabled >
           </div>
           <div class="form-group">
-            <input type="password" name="" class="form-control" placeholder="New Password" >
+            <input type="password" name="password" class="form-control" placeholder="New Password" required>
           </div>
           <div class="form-group">
-            <input type="password" name="" class="form-control" placeholder="Confirm New Password">
+            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm New Password" required>
           </div>
           <div class="row">
             <div class="col-lg-12">
               <div class="form-group">
                 <button type="submit" class="btn btn-danger pull-right">Submit</button>
+                <button type="reset" id="reset-form" style="display: none;" >Reset</button>
               </div>
             </div>
           </div>

@@ -1,65 +1,42 @@
-@extends('layout.dashboard-layout')
 
-@section('title', 'My Profile')
-
-@push('styles')
-<link href="{{asset('assets/css/my-profile.css')}}" rel="stylesheet" type="text/css">
-@endpush
-
-@section('content')
-
-  
-  <div class="rightBox">
-    <h1>My Properties</h1>
-    <div class="containerBox">
-      <div class="table-responsive">
-      @if (isset($data['RESPONSE_DATA']) && !empty($data['RESPONSE_DATA']))    
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Project</th>
-              <th>City</th>
-              <th>Unit Type</th>
-              <th>Area</th>
-              <th>BSP</th>
-              <th>Total Cost</th>
-              <th>Month Year</th>
-              <th>Payment Plan</th>
-            </tr>
-          </thead>
-          <tbody>
-               
-              @foreach ($data['RESPONSE_DATA'] as $k => $v) 
-                    <tr>
-                      <td>{{(++$k)}}</td>
-                      <td>{{$v['projectName']}}</td>
-                      <td>{{$v['city']}}</td>
-                      <td>{{$v['unitType']}}</td>
-                      <td>{{$v['size']}} {{$v['measurementUnit']}}</td>
-                      <td>{{$v['bspPerUnitSize']}} {{$v['measurementUnit']}}</td>
-                      <td>{{$v['totalCost']}}</td>
-                      <td>{{$v['dealClosedDate']}}</td>
-                      <td><a href="javascript:void(0)" @if(isset($v['paymentPlan']) && !empty($v['paymentPlan']))  class="payment-plan" data-tcf-id="{{$v['tcfId']}}" data-client-id="{{Session::get('client_session.0.0.ClientId')}}" @endif >{{ (isset($v['paymentPlan']) && !empty($v['paymentPlan']))?$v['paymentPlan']:'N/A' }} <em class="fa fa-angle-down"></em></a></td>
-                    </tr>
-                @endforeach        
-          
-            
-            
-            
-          </tbody>
-        </table>
-          @else
-      <div class="alert alert-danger">No records found ! </div>
-       @endif 
+      <div class="timelineBox">
+        <div class="heading">
+          <h2>Timeline</h2>
+        </div>
+        <div class="timeline">
+            @foreach ($data['RESPONSE_DATA'] as $v)
+          <div class="row">
+            <div class="col-sm-6 {{ ($v['msgIdentity'] == 'Request')?'':'col-sm-offset-6'}}">
+              <div class="{{ ($v['msgIdentity'] == 'Request')?'statusClose':'statusOpen'}}">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p>{{$v['subject']}}</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="name">Suresh Tiwari</p>
+                    <span>{{ date('d M Y H:i',strtotime($v['createdDate'])) }}</span> </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <p class="complaint">{{ substr($v['interactionDetails'],0,250) }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="attatchFile">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <label class="btn btn-default">Attachment &hellip;
+                          <input type="file" style="display: none;">
+                        </label>
+                      </div>
+                      <div class="col-sm-6"> <a class="btn" href="javascript:void(0)">More</a> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        @endforeach 
+        </div>
       </div>
-    </div>
-  </div>
-
-
-@endsection  {{-- content Section ends here --}}
-
-@push('scripts')
-    <script src="{{ asset("assets/js/function.js") }}" type="text/javascript"></script>
-    
-@endpush
+  
