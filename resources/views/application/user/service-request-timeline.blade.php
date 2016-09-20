@@ -13,7 +13,7 @@
                     <p>{{$v['subject']}}</p>
                   </div>
                   <div class="col-sm-6">
-                    <p class="name">Suresh Tiwari</p>
+                    <p class="name">{{$v['enterBy']}}</p>
                     <span>{{ date('d M Y H:i',strtotime($v['createdDate'])) }}</span> </div>
                 </div>
                 <div class="row">
@@ -25,9 +25,14 @@
                   <div class="attatchFile">
                     <div class="row">
                       <div class="col-sm-6">
-                        <label class="btn btn-default">Attachment &hellip;
-                          <input type="file" style="display: none;">
-                        </label>
+                        
+                          <?php 
+                          $file = $v['attachedFile'];
+             $isExists = Illuminate\Support\Facades\Storage::disk('s3')
+                     ->exists('/customer/ticket/'.$file); 
+             echo $src = ($isExists && !empty($file) && isset($file))?'<a href="https://s3-ap-southeast-1.amazonaws.com/sqy/customer/ticket/'.$file.'"><label class="btn btn-default">Attachment &hellip;</label></a>':'<a href="javascript:void(0)"><label class="btn btn-default">No Attachment &hellip;</label></a>';
+             ?>
+                        
                       </div>
                       <div class="col-sm-6"> <a class="btn" href="javascript:void(0)">More</a> </div>
                     </div>

@@ -26,4 +26,5 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::put('/reset-password', 'UserController@resetPassword');
     Route::get('/service-request-list', 'UserController@serviceRequestList');
     Route::get('/service-request-detail', 'UserController@serviceRequestDetails');
+    Route::post('/generate-service-ticket','UserController@generateServiceRequest');
 });

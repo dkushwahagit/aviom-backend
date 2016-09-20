@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Model\UserModel;
 use App\Model\ClientLoginModel;
 use App\Model\ClientMasterModel;
+use App\Model\ClientInteractionModel;
 use Illuminate\Support\Facades\Storage;
 use Validator;
 use DB;
@@ -502,5 +503,51 @@ class UserController extends Controller
         
         return $result;           
                    
+    }
+    
+    public function generateServiceRequest () {
+        $inputData = Input::all();
+        $rulesArr = array (
+            'ClientId'            => 'required',
+            'InteractionDetails'  => 'required',
+            'Idate'               => 'required',
+            'CreatedBy'           => 'required',
+            'Type'                => 'required',
+            'CMId'                => 'required',
+            'ScheduleStatus'      => 'required',
+            'RefCIId'             => 'required',
+            'IStatus'             => 'required',
+            'TicketNo'            => 'required',
+            'ReqSubject'          => 'required',
+            'MRefCIId'            => 'required',
+            'LoginType'           => 'required'
+            );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        $records = DB::table('clientinteraction')->insertGetId($inputData);
+        if (!empty($records) && isset($records)) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'Ticket Generated Successfully',
+                    'RESPONSE_DATA' => $records
+                );
+            }else {
+                $result = array (
+                    'ERROR'         => true,
+                    'RESPONSE_MSG'  => 'Error at insertion time',
+                    'RESPONSE_DATA' => $records
+                );
+            }
+        
+        
+        return $result;     
     }
 }

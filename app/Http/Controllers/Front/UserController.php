@@ -232,4 +232,53 @@ class UserController extends Controller
         return view('application.user.service-request-timeline')->with('data',$result);
         
     }
+    
+    public function generateServiceRequest () {
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        $cmId = Session::get('client_session.0.0.CMId');
+        $postData = Input::all();
+        if(Input::hasFile('ticket-attachment')) {
+                $fileObj = Input::file('ticket-attachment');
+               // echo $fileObj->getClientMimeType();                exit();
+                $ruleArr = array('ticket-attachment' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,jpeg,bmp,png,gif|min:10|max:2048');
+                $validator = Validator::make($postData, $ruleArr);
+                
+                if ($validator->fails())
+                 {
+                   $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return redirect('/service-request-list')->with('errors', $errors);
+                 }else {
+                       $fileName = self::uploadFiles($fileObj,time(),'customer/ticket/');
+                 }
+        }         
+        $inputData = array (
+            'ClientId'            => $ClientId,
+            'TcfId'               => 0,
+            'InteractionDetails'  => $postData['ticket-desc'],
+            'Idate'               => date('Y-m-d H:i:s'),
+            'CreatedBy'           => $ClientId,
+            'Type'                => 'IN',
+            'AttachedFile'        => (isset($fileName) && !empty($fileName))?$fileName:'',
+            'CMId'                => $cmId,
+            'ScheduleStatus'      => 'P',
+            'RefCIId'             => '0',
+            'IStatus'             => 'O',
+            'TicketNo'            => 'ticket1',
+            'ReqSubject'          => $postData['sub'],
+            'MRefCIId'            => '0',
+            'LoginType'           => 'C'
+        );
+        
+        $result = self::apiRequest('/generate-service-ticket', 'POST', $inputData);
+        if ($result['ERROR'] === false) {
+              return redirect('/service-request-list')->with('success', $result['RESPONSE_MSG']);
+        }else {
+            return redirect('/service-request-list')->with('error', $result['RESPONSE_MSG']);
+        }
+    }
 }

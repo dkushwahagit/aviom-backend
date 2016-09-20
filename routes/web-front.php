@@ -26,6 +26,7 @@
     Route::post('/reset-password', 'UserController@resetPassword');
     Route::get('/service-request-list', 'UserController@serviceRequestList');
     Route::get('/service-request-detail/{cIId}', 'UserController@serviceRequestDetails');
+    Route::post('/generate-service-ticket','UserController@generateServiceRequest');
   });  
   
   Route::match(['get','post'],'/','UserController@login');

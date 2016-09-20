@@ -11,9 +11,31 @@
 
   
   <div class="rightBox">
+      
     <h1>Service Requests <a class="pull-right btn btn-primary" data-toggle="modal" data-target="#addNewServiceRequest" href="javascript:void:(0)" >Add New Service Request</a></h1>
     <div class="containerBox">
       <div class="table-responsive">
+          @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+          @endif
+          
+          @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+         @endif
+     
+     @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+     @endif
           {{-- print_r($data) --}} 
           @if (isset($data['RESPONSE_DATA']) && !empty($data['RESPONSE_DATA'])) 
         <table class="table table-bordered">
@@ -51,19 +73,19 @@
         <h4 class="modal-title">ADD NEW SERVICE REQUEST</h4>
       </div>
       <div class="modal-body">
-        <form>
+          <form id="service-req-form" method="post" action="{{url('/generate-service-ticket')}}" enctype="multipart/form-data">
           <div class="form-group">
-            <label for="email">Subject<em>*</em></label>
-            <input type="email" class="form-control" id="email">
+            <label for="sub">Subject<em>*</em></label>
+            <input type="sub" class="form-control" id="sub" name="sub" required>
           </div>
           <div class="form-group">
-            <label for="exampleTextarea">Description</label>
-            <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+            <label for="ticket-desc">Description</label>
+            <textarea class="form-control" name="ticket-desc" id="ticket-desc" rows="3" required></textarea>
           </div>
           <div class="row">
             <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
               <div class="form-group">
-                <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+                  <input type="file" class="form-control-file" name="ticket-attachment" id="exampleInputFile" aria-describedby="fileHelp">
               </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
