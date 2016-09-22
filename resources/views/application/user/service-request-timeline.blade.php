@@ -68,9 +68,9 @@
                       <div class="col-sm-6">
                        <?php 
                           $file = $v['attachedFile'];
-             $isExists = Illuminate\Support\Facades\Storage::disk('s3')
-                     ->exists('/customer/ticket/'.$file); 
-             echo $src = ($isExists && !empty($file) && isset($file))?'<a target="_blank" href="https://s3-ap-southeast-1.amazonaws.com/sqy/customer/ticket/'.$file.'"><label class="btn btn-default">Download Attachment &hellip;</label></a>':'<a href="javascript:void(0)"><label class="btn btn-default">No Attachment &hellip;</label></a>';
+                          $awsObj = Illuminate\Support\Facades\Storage::disk('s3');
+             $isExists =  $awsObj->exists(config('app.AWS_TICKET_BUCKET').$file); 
+             echo $src = ($isExists && !empty($file) && isset($file))?'<a target="_blank" href="'.$awsObj->url(config('app.AWS_TICKET_BUCKET')).$file.'"><label class="btn btn-default">Download Attachment &hellip;</label></a>':'<a href="javascript:void(0)"><label class="btn btn-default">No Attachment &hellip;</label></a>';
              ?>
                         
                       </div>

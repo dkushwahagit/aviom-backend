@@ -54,6 +54,8 @@ return [
     //'url' => env('APP_URL'),
     'API_URL' => env('APP_URL'),
     'DEFAULT_CURL_TIMEOUT' => env('DEFAULT_CURL_TIMEOUT'),
+    'AWS_PROFILE_BUCKET'   => 'customer/profilepic/',
+    'AWS_TICKET_BUCKET'    => 'customer/ticket/',
 
     /*
     |--------------------------------------------------------------------------

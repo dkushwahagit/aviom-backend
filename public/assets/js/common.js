@@ -129,8 +129,14 @@ $(function(){
                                         $(msg).appendTo(modalBody);
                                         $('#msg').modal();
                                        setTimeout(function () { window.location.reload(); },2000);
-                                    }else {
-                                        var msg = '<div class="alert alert-danger">Profile Could Not Be Updated . </div>';
+                                    }
+                                    
+                                    if (data.ERROR === true) {
+                                        var msg = '<ul class="alert alert-danger">'; 
+                                        $.each(data['RESPONSE_MSG'],function (k,v) {
+                                            msg = msg + '<li>'+v[0]+'</li>';
+                                        });
+                                        msg = msg + '</ul>';
                                         $(msg).appendTo(modalBody);
                                         $('#msg').modal();
                                         
@@ -156,11 +162,12 @@ $(function(){
             data       : $(this).serialize(),
             beforeSend : function () {$.fn.loader('open');},
             success    : function (data,statusText,jqXHR) {
+                            if($('.msg-alert').length > 0){$('.msg-alert').detach(); }
                             if(data.ERROR == false) {
-                                var msg = '<div class="alert alert-success">'+data.RESPONSE_MSG+'</div>';
+                                var msg = '<div class="alert alert-success msg-alert">'+data.RESPONSE_MSG+'</div>';
                                 $(msg).insertBefore('#reset-password-form');
                             }else{
-                                var msg = '<ul class="alert alert-danger">';
+                                var msg = '<ul class="alert alert-danger msg-alert">';
                                 $.each(data.RESPONSE_MSG,function (index,err) {
                                     msg = msg+'<li>'+err+'</li>';
                                 });
@@ -168,9 +175,7 @@ $(function(){
                             }
                             $('#reset-form').trigger('click');
                             $.fn.loader('close');
-                            setTimeout(function () {
-                                    $('.alert').detach();
-                                },2000);
+                            
                          },
             error      : function (jqXHR,statusText,errorThrown) {
                           alert(errorThrown);
@@ -210,7 +215,24 @@ $(function(){
            beforeSend : function () { $.fn.loader('open');},
            success    : function (data,statusText,jqXHR) {
                            $.fn.loader('close');
-                           alert(JSON.stringify(data));
+                           if($('.msg-alert').length > 0){$('.msg-alert').detach(); }
+                           
+                           if (data['ERROR'] == true) {
+                               var ul = '<ul class="alert alert-danger msg-alert">';
+                               $.each(data['RESPONSE_MSG'],function (k,v) {
+                                   ul = ul + '<li>'+v[0]+'</li>';
+                               });
+                                ul = ul + '</ul>';
+                                $(ul).insertBefore('#add-referral-form');
+                           }
+                           
+                           if (data['ERROR'] == false) {
+                               var ul = '<ul class="alert alert-success msg-alert">'+data['RESPONSE_MSG']+'</ul>';
+                                $(ul).insertBefore('#add-referral-form');
+                                setTimeout(function () { window.location.reload()},3000);
+                           }
+                          
+                           
            },
            error      : function (jqXHR,statusText,errorThrown) { alert(errorThrown);}
        });

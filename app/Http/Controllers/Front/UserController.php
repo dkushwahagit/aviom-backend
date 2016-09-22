@@ -82,6 +82,8 @@ class UserController extends Controller
      * @return null
      */
     public function profile (Request $request) {
+        //$resp = Storage::disk('s3');echo $resp->url(config('app.AWS_PROFILE_BUCKET'));
+        //echo '<pre>';print_r(get_class_methods($resp)); exit;
         $clientMasterId = Session::get('client_session.0.0.CMId'); //client master id
         //print_r(Session::get('client_session'));exit;
         if (isset($clientMasterId) && !empty($clientMasterId)) {
@@ -190,7 +192,8 @@ class UserController extends Controller
                     );
                     return $result;
                  }else {
-                       $fileName = self::uploadFiles($fileObj,$cmId,'customer/profilepic/');
+                       $location = config('app.AWS_PROFILE_BUCKET');
+                       $fileName = self::uploadFiles($fileObj,$cmId,$location);
                     if (isset($fileName) && !empty($fileName)) {
                         $result = self::apiRequest('/update-my-profile-pic/'.$cmId, 'POST', array('CImage' => $fileName));
                         Session::forget('client_session.0.0.CImage');
@@ -253,7 +256,8 @@ class UserController extends Controller
                     );
                     return redirect('/service-request-list')->with('errors', $errors);
                  }else {
-                       $fileName = self::uploadFiles($fileObj,time(),'customer/ticket/');
+                       $location = config('app.AWS_TICKET_BUCKET');
+                       $fileName = self::uploadFiles($fileObj,time(),$location);
                  }
         }         
         $inputData = array (
@@ -334,7 +338,7 @@ class UserController extends Controller
     public function referralList () {
         $ClientId = Session::get('client_session.0.0.ClientId'); //client id
         $cmId = Session::get('client_session.0.0.CMId');
-        $result = self::apiRequest('/my-referral', 'GET', array('CMId' => $cmId, 'ClientId' => $ClientId));
+        $result = self::apiRequest('/my-referral-list', 'GET', array('CMId' => $cmId, 'ClientId' => $ClientId));
         return view('application.user.my-referral')->with('data',$result);
     }
     
@@ -345,6 +349,7 @@ class UserController extends Controller
         $inputData['ClientId'] = $ClientId;
         $inputData['CMId'] = $cmId;
         $result = self::apiRequest('/add-referral', 'POST', $inputData);
-        return view('application.user.my-referral')->with('data',$result);
+        return $result;
+        //return view('application.user.my-referral')->with('data',$result);
     }
 }

@@ -16,9 +16,9 @@
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <?php 
              $img = Session::get('client_session.0.0.CImage');
-             $isExists = Illuminate\Support\Facades\Storage::disk('s3')
-                     ->exists('/customer/profilepic/'.$img); 
-             $src = ($isExists && !empty($img) && isset($img))?'https://s3-ap-southeast-1.amazonaws.com/sqy/customer/profilepic/'.$img:asset('/images/default.png');
+             $awsObj = Illuminate\Support\Facades\Storage::disk('s3');
+             $isExists = $awsObj->exists('/customer/profilepic/'.$img); 
+             $src = ($isExists && !empty($img) && isset($img))?$awsObj->url(config('app.AWS_PROFILE_BUCKET')).$img:asset('/images/default.png');
              ?>
           <div class="imgBox">
             <div class="userImg">
@@ -41,7 +41,7 @@
             </div>
             <div class="socialSection"> <a href="javascript:void(0)"><em class="fa fa-facebook-square"></em></a> <a href="javascript:void(0)"> <em class="fa fa-linkedin-square"></em></a> </div>
             <div class="dvider"></div>
-            <a class="editBtn profile-btn" href="javascript:void(0)" role="button">edit profile</a> </div>
+            <a class="editBtn profile-btn" href="javascript:void(0)" role="button">Save profile</a> </div>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
             <form method="post" action="" enctype="multipart/form-data" id="profile-form">  
@@ -140,19 +140,19 @@
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-gross-salary"></em>Gross Salary (Monthly)</label>
-                  <input type="text" id="GrossSalary" class="form-control" placeholder="Enter gross salary" name="GrossSalary" value="{{$data['RESPONSE_DATA']['GrossSalary']}}" >
+                  <input type="number" id="GrossSalary" class="form-control" placeholder="Enter gross salary" name="GrossSalary" value="{{$data['RESPONSE_DATA']['GrossSalary']}}" >
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-other-rental-income"></em>Other/Rental Income (Monthly)</label>
-                  <input type="text" id="OtherIncome" class="form-control" placeholder="0" name="OtherIncome" value="{{$data['RESPONSE_DATA']['OtherIncome']}}">
+                  <input type="number" id="OtherIncome" class="form-control" placeholder="0" name="OtherIncome" value="{{$data['RESPONSE_DATA']['OtherIncome']}}">
                 </div>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-existing-EMI"></em>Existing EMI (Monthly)</label>
-                  <input type="text" id="EMIAmt" class="form-control" placeholder="0" name="EMIAmt" value="{{$data['RESPONSE_DATA']['EMIAmt']}}">
+                  <input type="number" id="EMIAmt" class="form-control" placeholder="0" name="EMIAmt" value="{{$data['RESPONSE_DATA']['EMIAmt']}}">
                 </div>
               </div>
             </div>

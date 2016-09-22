@@ -68,7 +68,7 @@ abstract class Controller extends BaseController
         return true;
     }
     
-    public static function uploadFiles ($file = null,$fileName = null, $location = 'customer/profilepic/') {
+    public static function uploadFiles ($file = null,$fileName = null, $location = '') {
         $extension = $file->getClientOriginalExtension();
         $filename = $fileName.'.'.$extension;
         $resp = Storage::disk('s3')->put($location.$filename, file_get_contents($file), 'public');

@@ -72,7 +72,7 @@
         <h4 class="modal-title">ADD NEW REFERRAL</h4>
       </div>
       <div class="modal-body">
-          <form id="add-referral-form" method="post" >
+          <form id="add-referral-form">
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="form-group">
@@ -101,7 +101,7 @@
               </div>
             </div>
           </div>
-         {{-- <div class="cloudTag">
+<!--          <div class="cloudTag">
             <h4>preference</h4>
             <ul>
               <li>City -</li>
@@ -125,7 +125,7 @@
               <li>Under Construction</li>
               <li>Ready to Move</li>
             </ul>
-          </div> --}}
+          </div> -->
           <div class="clearfix">
             <button type="submit" class="btn btn-danger">Submit</button>
           </div>
@@ -137,7 +137,3 @@
 
 @endsection  {{-- content Section ends here --}}
 
-@push('scripts')
-    <script src="{{ asset("assets/js/function.js") }}" type="text/javascript"></script>
-    <script src="{{ asset("assets/js/common.js") }}" type="text/javascript"></script>
-@endpush

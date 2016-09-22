@@ -304,6 +304,36 @@ class UserController extends Controller
     public function updateMyProfile (Request $request,$cmId = null) {
         $inputData = Input::all();
         $result = array ();
+        $rulesArr = array (
+//            'PanNo'             => '',
+//            'AlternateMobileNo' => '',
+//            'AlternateEmailId'  => '',
+//            'City'              => '',
+//            'Address'           => '',
+//            'PermanentCity'     => '',
+//            'PermanentAddress'  => '',
+//            'OccupationType'    => '',
+//            'Designation'       => '',
+//            'CompanyName'       => '',
+            'GrossSalary'       => 'numeric',
+            'OtherIncome'       => 'numeric',
+            'EMIAmt'            => 'numeric'
+//            'DOB'               => '',
+//            'AnniversaryDate'   => '',
+//            'FBLink'            => '',
+//            'LinkedInLink'      => ''
+        );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        
         $records = ClientMasterModel::where('CMId',$cmId)
                    ->update($inputData);
         if (($records === 1)) {
@@ -574,5 +604,62 @@ class UserController extends Controller
         
         
         return $result;
+    }
+    
+    public function addReferral () {
+        $inputData = Input::all();
+        
+        $rulesForLead = array (
+            'PhoneNumberD'        => 'unique:lead',
+            'EmailId'             => 'unique:lead'
+        );
+        
+        $leadArr = array ('EmailD' => $inputData['EmailId'], 'PhoneNumberD' => $inputData['ContactNo'] ); 
+        $validator = Validator::make($leadArr,$rulesForLead);
+        
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        $rulesArr = array (
+            'ClientId'            => 'required',
+            'CName'               => 'required',
+            'ContactNo'           => 'required|unique:clientreferral',
+            'EmailId'             => 'required|unique:clientreferral',
+            'City'                => 'required',
+            'CMId'                => 'required'
+            );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        $records = DB::table('clientreferral')->insertGetId($inputData);
+        if (!empty($records) && isset($records)) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'Referral Added Successfully',
+                    'RESPONSE_DATA' => $records
+                );
+            }else {
+                $result = array (
+                    'ERROR'         => true,
+                    'RESPONSE_MSG'  => 'Error in query',
+                    'RESPONSE_DATA' => $records
+                );
+            }
+        
+        
+        return $result;     
     }
 }
