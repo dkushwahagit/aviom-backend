@@ -268,7 +268,7 @@ class UserController extends Controller
             'ScheduleStatus'      => 'P',
             'RefCIId'             => '0',
             'IStatus'             => 'O',
-            'TicketNo'            => 'ticket1',
+            'TicketNo'            => '#'.time(),
             'ReqSubject'          => $postData['sub'],
             'MRefCIId'            => '0',
             'LoginType'           => 'C'
@@ -280,5 +280,71 @@ class UserController extends Controller
         }else {
             return redirect('/service-request-list')->with('error', $result['RESPONSE_MSG']);
         }
+    }
+    
+    public function replyServiceRequest () {
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        $cmId = Session::get('client_session.0.0.CMId');
+        $postData = Input::all();
+        if(Input::hasFile('ticket-attachment')) {
+                $fileObj = Input::file('ticket-attachment');
+               // echo $fileObj->getClientMimeType();                exit();
+                $ruleArr = array('ticket-attachment' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,jpeg,bmp,png,gif|min:10|max:2048');
+                $validator = Validator::make($postData, $ruleArr);
+                
+                if ($validator->fails())
+                 {
+                   $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return redirect('/service-request-list')->with('errors', $errors);
+                 }else {
+                       $fileName = self::uploadFiles($fileObj,time(),'customer/ticket/');
+                 }
+        }         
+        $inputData = array (
+            'ClientId'            => $ClientId,
+            'TcfId'               => 0,
+            'InteractionDetails'  => $postData['ticket-desc'],
+            'Idate'               => date('Y-m-d H:i:s'),
+            'CreatedBy'           => $ClientId,
+            'Type'                => 'IN',
+            'AttachedFile'        => (isset($fileName) && !empty($fileName))?$fileName:'',
+            'CMId'                => $cmId,
+            'ScheduleStatus'      => 'P',
+            'RefCIId'             => $postData['CIId'],
+            'IStatus'             => 'O',
+            'TicketNo'            => $postData['TicketNo'],
+            'ReqSubject'          => $postData['sub'],
+            'MRefCIId'            => $postData['main_CIId'],
+            'LoginType'           => 'C'
+        );
+        
+        $result = self::apiRequest('/generate-service-ticket', 'POST', $inputData);
+        if ($result['ERROR'] === false) {
+              return redirect('/service-request-list')->with('success', $result['RESPONSE_MSG']);
+        }else {
+            return redirect('/service-request-list')->with('error', $result['RESPONSE_MSG']);
+        }
+    }
+    
+    public function referralList () {
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        $cmId = Session::get('client_session.0.0.CMId');
+        $result = self::apiRequest('/my-referral', 'GET', array('CMId' => $cmId, 'ClientId' => $ClientId));
+        return view('application.user.my-referral')->with('data',$result);
+    }
+    
+    public function addReferral () {
+        $inputData = Input::all();
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        $cmId = Session::get('client_session.0.0.CMId');
+        $inputData['ClientId'] = $ClientId;
+        $inputData['CMId'] = $cmId;
+        $result = self::apiRequest('/add-referral', 'POST', $inputData);
+        return view('application.user.my-referral')->with('data',$result);
     }
 }

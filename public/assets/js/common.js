@@ -188,7 +188,9 @@ $(function(){
             beforeSend : function () { $.fn.loader('open');if($('.timelineBox').length > 0) { $('.timelineBox').detach(); }},
             success  : function (data,statusText,jqXHR) {
                            //alert(data);
-                           $(data).insertAfter('.table-responsive');
+                           //$(data).insertAfter('.table-responsive');
+                           $('<tr><td colspan="4" style="background:#fff;">'+data+'</td></tr>').insertAfter(parentTr);
+                           $('.timelineBox').width($('.table-responsive').width()-40);
                            $.fn.loader('close');
             },
             error    : function (jqXHR,statusText,errorThrown) {
@@ -197,5 +199,21 @@ $(function(){
         });
     });
    
+   $('#add-referral-form').submit(function (e) {
+       e.preventDefault();
+       var formData = $(this).serialize();
+       $.ajax({
+           async      : false,
+           type       : 'POST',
+           url        : window.location.origin+'/add-referral',
+           data       : formData,
+           beforeSend : function () { $.fn.loader('open');},
+           success    : function (data,statusText,jqXHR) {
+                           $.fn.loader('close');
+                           alert(JSON.stringify(data));
+           },
+           error      : function (jqXHR,statusText,errorThrown) { alert(errorThrown);}
+       });
+   });
    
 });

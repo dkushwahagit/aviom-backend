@@ -27,6 +27,9 @@
     Route::get('/service-request-list', 'UserController@serviceRequestList');
     Route::get('/service-request-detail/{cIId}', 'UserController@serviceRequestDetails');
     Route::post('/generate-service-ticket','UserController@generateServiceRequest');
+    Route::post('/reply-service-ticket','UserController@replyServiceRequest');
+    Route::get('/my-referral-list','UserController@referralList');
+    Route::post('/add-referral','UserController@addReferral');
   });  
   
   Route::match(['get','post'],'/','UserController@login');

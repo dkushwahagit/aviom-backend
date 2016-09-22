@@ -39,10 +39,10 @@ nav ul li.active{border-left:#e01963 solid 4px}
 .rightBox .containerBox .table{border:#fff solid 1px}
 .rightBox .containerBox .table tr th{background:#347ab6;border:#fff solid 1px;color:#fff;font-size:14px;font-weight:400;font-family:'proxima_nova_ltsemibold'}
 .rightBox .containerBox .table tr th:first-child,.rightBox .containerBox .table tr td:first-child{text-align:center}
-.rightBox .containerBox .table tr td{padding:0 15px;background:#f1f1f1;border:#fff solid 1px;color:#333;line-height:32px;font-size:13px}
+.rightBox .containerBox .table tr td{padding:0 15px;background:#f1f1f1;border:#fff solid 1px;color:#333;line-height:32px;font-size:13px; overflow: hidden}
 .rightBox .containerBox .table tr td .table{box-shadow:0 3px 0 #787878}
 .rightBox .containerBox .table tr td tr th{background:#e01963}
-.rightBox .containerBox .table tr td tr td{background:#e6e5e5}
+.rightBox .containerBox .table tr td tr td{background:#e6e5e5;}
 footer{padding:15px 0;background:#333;display:block;position:relative;z-index:99}
 footer ul{display:block}
 footer ul li{padding:8px 15px;display:block;color:#c3c3c3;float:left;border-left:#484848 solid 1px}

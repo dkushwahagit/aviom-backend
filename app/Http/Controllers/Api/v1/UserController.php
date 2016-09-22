@@ -435,7 +435,7 @@ class UserController extends Controller
                                 From clientinteraction left join 
                                 (Select max(CIId) as CIId,MRefCIId From clientinteraction 
                                 where CMId = "'.$inputData['CMId'].'" group by MRefCIId)b on clientinteraction.CIId=b.MRefCIId
-                                where CMId = "'.$inputData['CMId'].'" And ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 '
+                                where CMId = "'.$inputData['CMId'].'" And ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 order by clientinteraction.createdDate desc'
                    );
         $records = collect($records)->all();
             if (!empty($records) && isset($records)) {
@@ -473,7 +473,7 @@ class UserController extends Controller
                     );
                     return $result;
         }
-        $records = DB::select('Select Case when (ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 )
+        $records = DB::select('Select clientinteraction.CIId As CIId, clientinteraction.TicketNo As ticketNo, Case when (ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 )
                                then clientinteraction.Idate else clientinteraction.CreatedDate END As createdDate, clientinteraction.ReqSubject As subject,
                                 clientinteraction.AttachedFile As attachedFile, clientinteraction.InteractionDetails As interactionDetails,
                                 Case when (ifnull(clientinteraction.RefCIId,0)=0 And ifnull(clientinteraction.MRefCIId,0)=0 )
@@ -533,6 +533,9 @@ class UserController extends Controller
                     return $result;
         }
         $records = DB::table('clientinteraction')->insertGetId($inputData);
+        if ($inputData['RefCIId'] != '0') {
+            $records = DB::table('clientinteraction')->where('clientinteraction.CIId',$inputData['RefCIId'])->update(['IStatus' => 'C']);
+        }
         if (!empty($records) && isset($records)) {
                 $result = array (
                     'ERROR'         => false,
@@ -549,5 +552,27 @@ class UserController extends Controller
         
         
         return $result;     
+    }
+    
+    public function referralList () {
+        $inputData = Input::all();
+        $records = DB::table('clientreferral')->where('CMId',$inputData['CMId'])->orWhere('ClientId',$inputData['ClientId'])->get();
+        $records = collect($records)->all();
+        if (!empty($records) && isset($records)) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'Data fetched Successfully!',
+                    'RESPONSE_DATA' => $records
+                );
+            }else {
+                $result = array (
+                    'ERROR'         => true,
+                    'RESPONSE_MSG'  => 'No Records Found!',
+                    'RESPONSE_DATA' => $records
+                );
+            }
+        
+        
+        return $result;
     }
 }

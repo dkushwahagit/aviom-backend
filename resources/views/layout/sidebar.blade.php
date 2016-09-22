@@ -18,7 +18,7 @@
         <li><a href="{{url('/my-loans')}}"><em class="icon-my-loans"></em> <span>My Loans</span> </a></li>
         <li><a href="{{url('/service-request-list')}}"><em class="icon-service-request"></em> <span>Service Requests</span> </a></li>
         <li><a href="{{url('/my-credit-notes')}}"><em class="icon-my-cradit-notes"></em> <span>My Credit Notes</span> </a></li>
-        <li><a href="javascript:void(0)"><em class="icon-my-references"></em> <span>My Referral</span> </a></li>
+        <li><a href="{{url('/my-referral-list')}}"><em class="icon-my-references"></em> <span>My Referral</span> </a></li>
         <li><a href="{{ url('/exclusive-deals') }}"><em class="icon-exclusive-deal"></em> <span>Exclusive Deals</span> </a></li>
         <li><a href="javascript:$('#reset-password').modal();"><em class="icon-exclusive-deal"></em> <span>Reset Password</span> </a></li>
         <li><a href="{{url('/logout')}}"><em class="icon-logout"></em> <span>Logout</span></a></li>

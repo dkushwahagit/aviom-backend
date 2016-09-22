@@ -27,4 +27,7 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::get('/service-request-list', 'UserController@serviceRequestList');
     Route::get('/service-request-detail', 'UserController@serviceRequestDetails');
     Route::post('/generate-service-ticket','UserController@generateServiceRequest');
+    Route::post('/reply-service-ticket','UserController@replyServiceRequest');
+    Route::get('/my-referral-list','UserController@referralList');
+    Route::post('/add-referral','UserController@addReferral');
 });
