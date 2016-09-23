@@ -179,7 +179,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             if(Input::hasFile('CImage')) {
                 $fileObj = Input::file('CImage');
-                $ruleArr = array('CImage' => 'mimes:jpeg,bmp,png,gif|min:100|max:2048');
+                $ruleArr = array('CImage' => 'mimes:jpeg,bmp,png,gif|min:5|max:2048');
                 $validator = Validator::make($inputData, $ruleArr);
                 
                 if ($validator->fails())

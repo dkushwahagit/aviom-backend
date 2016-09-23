@@ -306,8 +306,8 @@ class UserController extends Controller
         $result = array ();
         $rulesArr = array (
 //            'PanNo'             => '',
-//            'AlternateMobileNo' => '',
-//            'AlternateEmailId'  => '',
+            'AlternateMobileNo' => 'numeric',
+            'AlternateEmailId'  => 'email',
 //            'City'              => '',
 //            'Address'           => '',
 //            'PermanentCity'     => '',

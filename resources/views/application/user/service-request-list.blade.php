@@ -41,7 +41,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>#</th>
+              <th># Ticket No.</th>
               <th>Date</th>
               <th>Subject</th>
               <th>Status</th>

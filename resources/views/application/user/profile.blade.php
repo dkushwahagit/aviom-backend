@@ -63,7 +63,7 @@
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-email"></em>Alternate Email ID</label>
-                  <input type="text" id="AlternateEmailId" class="form-control" placeholder="Enter alternate emial id" name="AlternateEmailId" value="{{ $data['RESPONSE_DATA']['AlternateEmailId']}}" >
+                  <input type="email" class="form-control" placeholder="Enter alternate emial id" name="AlternateEmailId" value="{{ $data['RESPONSE_DATA']['AlternateEmailId']}}" >
                 </div>
               </div>
             </div>
@@ -270,6 +270,11 @@ $(document).ready(function () {
 $('#AnniversaryDate, #DOB').datepicker({
 format: "dd-mm-yyyy"
 });  
+$( "#GrossSalary, #OtherIncome, #EMIAmt" ).on( "keyup", function( event ) {
+  if(event.which == '69') {
+      $(this).val('');
+  }
+});
 });
 </script>
 @endpush
