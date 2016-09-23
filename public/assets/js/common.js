@@ -102,10 +102,10 @@ $(function(){
     $('a.profile-btn').click(function () {
                 $.fn.loader('open');
                 var postDataObj = {};
-                var formObj = $('#profile-form').serializeArray();
-                $(formObj).each(function (index,v) {
+                var formObj = $('#profile-form').serialize();
+               /* $(formObj).each(function (index,v) {
                          postDataObj[v.name] = v.value;
-                });
+                }); */
                 var modalBody = $('div#msg div.modal-body');
                 $(modalBody).html('');
                 if ($('#Profiling').val() != '') {
@@ -119,7 +119,7 @@ $(function(){
                     async      : false,
                     type       : 'PUT',
                     url        : siteUrl+'/update-my-profile',
-                    data       : postDataObj,
+                    data       : formObj,
                     beforeSend : function () {},
                     success    : function (data,statusText,jqXHR) { 
                                 

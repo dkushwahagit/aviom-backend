@@ -312,16 +312,21 @@ class UserController extends Controller
 //            'Address'           => '',
 //            'PermanentCity'     => '',
 //            'PermanentAddress'  => '',
+//            'PINNo'             => '',
+//            'CountryName'       => '',
+//            'PPINNo'            => '',
+//            'PCountryName'      => '',
 //            'OccupationType'    => '',
 //            'Designation'       => '',
 //            'CompanyName'       => '',
             'GrossSalary'       => 'numeric',
             'OtherIncome'       => 'numeric',
-            'EMIAmt'            => 'numeric'
-//            'DOB'               => '',
-//            'AnniversaryDate'   => '',
-//            'FBLink'            => '',
-//            'LinkedInLink'      => ''
+            'EMIAmt'            => 'numeric',
+            'DOB'               => 'date',
+            'AnniversaryDate'   => 'date',
+            'FBLink'            => 'active_url',
+            'LinkedInLink'      => 'active_url'
+//          'Remarks'           => ''            
         );
         $validator = Validator::make($inputData,$rulesArr);
         if ($validator->fails()) {
@@ -333,9 +338,32 @@ class UserController extends Controller
                     );
                     return $result;
         }
-        
+        $postArr = array (
+//            'PanNo'             => $inputData[''],
+            'AlternateMobileNo' => $inputData['AlternateMobileNo'],
+            'AlternateEmailId'  => $inputData['AlternateEmailId'],
+            'City'              => $inputData['City'],
+            'Address'           => $inputData['Address'],
+            'PermanentCity'     => $inputData['PermanentCity'],
+            'PermanentAddress'  => $inputData['PermanentAddress'],
+            'PINNo'             => $inputData['PINNo'],
+            'CountryName'       => $inputData['CountryName'],
+            'PPINNo'            => $inputData['PPINNo'],
+            'PCountryName'      => $inputData['PCountryName'],
+            'OccupationType'    => $inputData['OccupationType'],
+            'Designation'       => $inputData['Designation'],
+            'CompanyName'       => $inputData['CompanyName'],
+            'GrossSalary'       => (float)$inputData['GrossSalary'],
+            'OtherIncome'       => (float)$inputData['OtherIncome'],
+            'EMIAmt'            => (float)$inputData['EMIAmt'],
+            'DOB'               => (isset($inputData['DOB']) && !empty($inputData['DOB']))?date('Y-m-d',strtotime($inputData['DOB'])):date('Y-m-d',strtotime('1900-01-01')),
+            'AnniversaryDate'   => (isset($inputData['AnniversaryDate']) && !empty($inputData['AnniversaryDate']))?date('Y-m-d',strtotime($inputData['AnniversaryDate'])):date('Y-m-d',strtotime('1900-01-01')),
+            'FBLink'            => $inputData['FBLink'],
+            'LinkedInLink'      => $inputData['LinkedInLink'],
+            'Remarks'           => $inputData['Remarks']
+        );
         $records = ClientMasterModel::where('CMId',$cmId)
-                   ->update($inputData);
+                   ->update($postArr);
         if (($records === 1)) {
                 $result = array (
                     'ERROR'         => false,

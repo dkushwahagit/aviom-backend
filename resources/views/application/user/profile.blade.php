@@ -3,6 +3,7 @@
 @section('title', 'My Profile')
 
 @push('styles')
+<link href="{{asset('assets/lib/css/bootstrap-datetimepicker.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('assets/css/my-profile.css')}}" rel="stylesheet" type="text/css">
 @endpush
 
@@ -39,7 +40,7 @@
                 <li><em class="icon-email"></em> {{ $data['RESPONSE_DATA']['EmailId']}}</li>
               </ul>
             </div>
-            <div class="socialSection"> <a href="javascript:void(0)"><em class="fa fa-facebook-square"></em></a> <a href="javascript:void(0)"> <em class="fa fa-linkedin-square"></em></a> </div>
+              <div class="socialSection"> <a href="{{isset($data['RESPONSE_DATA']['FBLink']) && !empty($data['RESPONSE_DATA']['FBLink'])?$data['RESPONSE_DATA']['FBLink']:'javascript:void(0)'}}" target="_blank"><em class="fa fa-facebook-square"></em></a> <a href="{{isset($data['RESPONSE_DATA']['LinkedInLink']) && !empty($data['RESPONSE_DATA']['LinkedInLink'])?$data['RESPONSE_DATA']['LinkedInLink']:'javascript:void(0)'}}" target="_blank"> <em class="fa fa-linkedin-square"></em></a> </div>
             <div class="dvider"></div>
             <a class="editBtn profile-btn" href="javascript:void(0)" role="button">Save profile</a> </div>
         </div>
@@ -70,16 +71,18 @@
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-city"></em>Current City </label>
-                  <input type="text" id="City" class="form-control" placeholder="Enter current city" name="City" value="{{ $data['RESPONSE_DATA']['City']}}" >
+                  <input type="text" id="City" name="City" class="form-control" placeholder="Enter current city" value="{{ $data['RESPONSE_DATA']['City']}}">
+                  
                 </div>
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-address"></em>Current Address</label>
-                  <input type="text" id="Address" class="form-control" placeholder="Enter current  address" name="Address" value="{{ $data['RESPONSE_DATA']['Address']}}" >
+                  <input type="text" id="Address" class="form-control" placeholder="Enter current  address" name="Address" value="{{ $data['RESPONSE_DATA']['Address']}}">
                 </div>
               </div>
-            </div>
+            </div>        
+            
             <div class="row">
               <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="form-group">
@@ -106,6 +109,51 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-city"></em>Current Zip Code </label>
+                  <input type="text" id="PINNo" name="PINNo" value="{{ $data['RESPONSE_DATA']['PINNo'] }}" class="form-control" placeholder="Enter current zip code">
+                  
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-address"></em>Current Country</label>
+                  <input type="text" id="CountryName" name="CountryName" value="{{ $data['RESPONSE_DATA']['CountryName'] }}" class="form-control" placeholder="Enter country name">
+                  
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                  <label>
+                  <em class="icon-city"></em>Permanent Zip Code
+                  <div class="checkBoxx">
+                    <input type="checkbox" id="ZipAsAbove" onchange="if($(this).prop('checked') == true){ $('#PPINNo').val($('#PINNo').val());}">
+                  </div>
+                  <span>same as above </span>
+                  </label>
+                    <input type="text" id="PPINNo" name="PPINNo" value="{{ $data['RESPONSE_DATA']['PPINNo'] }}" class="form-control" placeholder="Enter permanent zip code">
+                  
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                  <label>
+                  <em class="icon-address"></em>Permanent Country
+                  <div class="checkBoxx">
+                    <input type="checkbox" id="CountryAsAbove" onchange="if($(this).prop('checked') == true){ $('#PCountryName').val($('#CountryName').val());}">
+                  </div>
+                  <span>same as above </span>
+                  </label>
+                 <input type="text" id="PCountryName" name="PCountryName" value="{{ $data['RESPONSE_DATA']['PCountryName'] }}" class="form-control" placeholder="Enter permanent country name">
+                </div>
+              </div>
+            </div>
+                    
             <div class="row">
               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="form-group">
@@ -162,13 +210,13 @@
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form-group">
                       <label><em class="icon-dob"></em>Date of Birth</label>
-                      <input type="text" id="DOB" class="form-control" placeholder="Enter date of birth" value="{{$data['RESPONSE_DATA']['DOB']}}" name="DOB">
+                      <input type="text" id="DOB" class="form-control" placeholder="Enter date of birth" value="{{($data['RESPONSE_DATA']['DOB'] == '1900-01-01 00:00:00')?'':date('d-m-Y',strtotime($data['RESPONSE_DATA']['DOB']))}}" name="DOB">
                     </div>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form-group">
                       <label><em class="icon-dob"></em>Anniversary Date</label>
-                      <input type="text" id="AnniversaryDate" class="form-control" placeholder="Enter anniversary date" name="AnniversaryDate" value="{{$data['RESPONSE_DATA']['AnniversaryDate']}}">
+                      <input type="text" id="AnniversaryDate" class="form-control" placeholder="Enter anniversary date" name="AnniversaryDate" value="{{($data['RESPONSE_DATA']['AnniversaryDate'] == '1900-01-01 00:00:00')?'':date('d-m-Y',strtotime($data['RESPONSE_DATA']['AnniversaryDate']))}}">
                     </div>
                   </div>
                 </div>
@@ -176,7 +224,7 @@
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <div class="form-group">
                   <label><em class="icon-remark"></em>Tell Us More About You</label>
-                  <textarea class="form-control"></textarea>
+                  <textarea class="form-control" name="Remarks">{{$data['RESPONSE_DATA']['Remarks']}}</textarea>
                 </div>
               </div>
             </div>
@@ -215,5 +263,13 @@
 @endsection  {{-- content Section ends here --}}
 
 @push('scripts')
+    <script src="{{ asset("assets/lib/js/bootstrap-datetimepicker.js")}}" type="text/javascript"></script>  
     <script src="{{ asset("assets/js/function.js") }}" type="text/javascript"></script>
+    <script>
+$(document).ready(function () {
+$('#AnniversaryDate, #DOB').datepicker({
+format: "dd-mm-yyyy"
+});  
+});
+</script>
 @endpush
