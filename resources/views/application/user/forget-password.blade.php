@@ -13,6 +13,8 @@
     <div class="box">
       @if(isset($email_success) && !empty($email_success))  
       <div class="alert alert-success"> {{$email_success}} </div>
+      @elseif(isset($email_error) && !empty($email_error))  
+      <div class="alert alert-danger"> {{$email_error}} </div>
         @else 
       <div class="panelHeader">FORGOT PASSWORD</div>
       <div class="panelBody">
