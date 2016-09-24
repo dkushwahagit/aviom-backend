@@ -39,10 +39,11 @@ $(function(){
                     async       : false,
                     url         : siteUrl+'/my-payment-schedule',
                     data        : {tcfId:tcfId,clientId:clientId},
-                    beforeSend  : function () {},
+                    beforeSend  : function () {$.fn.loader('open'); $('.payment-schedule').detach();},
                     success      : function (data,textStatus,jqXHR) { 
                                     if (textStatus == 'success') {
                                         $(data).insertAfter(parentTr);
+                                        $.fn.loader('close');
                                     }
                     },
                     error       : function (jqXHR,textStatus,errorThrown) {
