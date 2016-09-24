@@ -690,4 +690,24 @@ class UserController extends Controller
         
         return $result;     
     }
+    
+    public function getCMIdByEmail ($email = null) {
+        
+        $records = ClientMasterModel::where('EmailId',$email)->select('CMId')->first();
+        $records = collect($records)->all();
+        if (!empty($records) && isset($records)) {
+            $result = array (
+                'ERROR'         => false,
+                'RESPONSE_MSG'  => 'Data fetched Successfully',
+                'RESPONSE_DATA' => $records
+            );
+        }else {
+            $result = array (
+                'ERROR'         => true,
+                'RESPONSE_MSG'  => 'No Data found',
+                'RESPONSE_DATA' => ''
+            );
+        }
+        return $result;
+    }
 }

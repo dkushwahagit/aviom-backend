@@ -35,3 +35,4 @@
   Route::match(['get','post'],'/','UserController@login');
   Route::post('/forgot-password','UserController@forgotPassword');
   Route::get('/forgot-password/{encrypted_email?}','UserController@forgotPassword');
+  Route::post('/reset-forgot-password', 'UserController@resetForgotPassword');

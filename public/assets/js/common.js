@@ -155,6 +155,7 @@ $(function(){
     });
     
     $('#reset-password-form').submit(function (e) {
+        var trg = e.target;
         e.preventDefault();
         $.ajax({
             async      : false,
@@ -166,17 +167,49 @@ $(function(){
                             if($('.msg-alert').length > 0){$('.msg-alert').detach(); }
                             if(data.ERROR == false) {
                                 var msg = '<div class="alert alert-success msg-alert">'+data.RESPONSE_MSG+'</div>';
-                                $(msg).insertBefore('#reset-password-form');
+                                $(msg).insertBefore(trg);
                             }else{
                                 var msg = '<ul class="alert alert-danger msg-alert">';
                                 $.each(data.RESPONSE_MSG,function (index,err) {
                                     msg = msg+'<li>'+err+'</li>';
                                 });
-                                $(msg).insertBefore('#reset-password-form');
+                                $(msg).insertBefore(trg);
                             }
                             $('#reset-form').trigger('click');
                             $.fn.loader('close');
                             
+                         },
+            error      : function (jqXHR,statusText,errorThrown) {
+                          alert(errorThrown);
+            }
+        });
+    });
+    
+    $('#reset-forget-password-form').submit(function (e) {
+        var trg = e.target;
+        e.preventDefault();
+        $.ajax({
+            async      : false,
+            url        : window.location.origin+'/reset-forgot-password',
+            type       : 'POST',
+            data       : $(this).serialize(),
+            beforeSend : function () {$.fn.loader('open');},
+            success    : function (data,statusText,jqXHR) {
+                            if($('.msg-alert').length > 0){$('.msg-alert').detach(); }
+                            if(data.ERROR == false) {
+                                var msg = '<div class="alert alert-success msg-alert">'+data.RESPONSE_MSG+'</div>';
+                                $(msg).insertBefore(trg);
+                            }else{
+                                var msg = '<ul class="alert alert-danger msg-alert">';
+                                $.each(data.RESPONSE_MSG,function (index,err) {
+                                    msg = msg+'<li>'+err+'</li>';
+                                });
+                                $(msg).insertBefore(trg);
+                            }
+                            $(trg).hide();
+                            
+                            $.fn.loader('close');
+                           setTimeout(function () { window.location.href=window.location.origin+'/';},2000);
                          },
             error      : function (jqXHR,statusText,errorThrown) {
                           alert(errorThrown);

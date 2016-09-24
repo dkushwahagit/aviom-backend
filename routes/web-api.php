@@ -30,4 +30,6 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::post('/reply-service-ticket','UserController@replyServiceRequest');
     Route::get('/my-referral-list','UserController@referralList');
     Route::post('/add-referral','UserController@addReferral');
+    Route::get('/get-client-master-id-by-email/{emailId}','UserController@getCMIdByEmail');
+    
 });

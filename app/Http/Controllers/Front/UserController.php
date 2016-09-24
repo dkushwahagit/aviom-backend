@@ -374,7 +374,23 @@ class UserController extends Controller
             
         }else if ($request->isMethod('GET') && isset($encrypted_email) && !empty($encrypted_email)) {
             $email = self::decrypt($encrypted_email);
-            return view('application.user.reset-password')->with('emailid',$email);
+            
+            return view('application.user.forget-password')->with('emailid',$encrypted_email)->with('email',$email);
+        }
+    }
+    
+    public function resetForgotPassword(Request $request) {
+        if ($request->ajax()) {
+             $inputData = Input::all();
+             $email = self::decrypt($inputData['token']);
+             $record = self::apiRequest('/get-client-master-id-by-email/'.$email, 'GET');
+             $cmId = $record['RESPONSE_DATA']['CMId'];
+             if (isset($cmId) && !empty($cmId)) {
+             $result = self::apiRequest('/reset-password', 'PUT', array('CMId'=>$cmId,'password_confirmation' => $inputData['password_confirmation'],'password' => $inputData['password']));
+             return $result;
+             }else {
+                 return $record;
+             }
         }
     }
 }
