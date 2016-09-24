@@ -28,14 +28,15 @@
                           <td>{{$v['tcfRefId']}}</td>
                           <td>{{$v['StageName']}}</td>
                           <td>{{$v['PaymentDescription']}}</td>
-                          <td>{{date('d M Y',strtotime($v['ExpectedDueDate']))}}</td>
+                          <td>{{($v['ExpectedDueDate'] == '1900-01-01 00:00:00')?'N/A':date('d M Y',strtotime($v['ExpectedDueDate']))}}</td>
                           <td>
                               @if($v['PaymentStatus'] == 'P')
                               
                                   Pending
                                @elseif($v['PaymentStatus'] == 'C')
-                                  Confirmed                                 
-                              
+                                  Completed                                 
+                              @else
+                                Partially Completed
                               @endif
                               </td>
                           <td>{{ $v['AmountPaid'] }}</td>

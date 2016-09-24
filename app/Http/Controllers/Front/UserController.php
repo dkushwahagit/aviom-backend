@@ -352,4 +352,29 @@ class UserController extends Controller
         return $result;
         //return view('application.user.my-referral')->with('data',$result);
     }
+    
+    public function forgotPassword (Request $request,$encrypted_email = null) {
+        if ($request->isMethod('GET') && is_null($encrypted_email)) {
+            
+            return view('application.user.forget-password');
+            
+        }else if($request->isMethod('POST')  && is_null($encrypted_email)) {
+            
+            $inputData = Input::all();
+            $encryptedEmail = self::encrypt($inputData['email']);
+            $url = url('/forget-password/'.$encryptedEmail);
+            $link = "<a href='{$url}'>Click Here To Reset Your Password</a>";
+            $mailArray = array (
+                'to'      => $inputData,
+                'subject' => 'Reset Mysquareyards Password Link',
+                'body'    => 'Hi Folk, <br/> Please click the below link to reset your password.<br/><br/><br/>'.$link
+            );
+            self::sendEmail($mailArray);
+            return view('application.user.forget-password')->with('email_success','Email Sent, Please check your inbox!');
+            
+        }else if ($request->isMethod('GET') && isset($encrypted_email) && !empty($encrypted_email)) {
+            $email = self::decrypt($encrypted_email);
+            return view('application.user.reset-password')->with('emailid',$email);
+        }
+    }
 }

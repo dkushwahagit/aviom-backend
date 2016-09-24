@@ -40,9 +40,7 @@
       </div>
       <div class="modal-body">
           <form method="post" action="{{ url('/reset-password')}}" id="reset-password-form">
-          <div class="form-group">
-            <input type="Email" name="" class="form-control" placeholder="EmailId@gmail.com" disabled >
-          </div>
+         
           <div class="form-group">
             <input type="password" name="password" class="form-control" placeholder="New Password" required>
           </div>

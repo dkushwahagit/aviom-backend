@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
 
 abstract class Controller extends BaseController
 {
@@ -75,5 +77,62 @@ abstract class Controller extends BaseController
         if ($resp) {  // return true on success
           return $filename; 
         }
+    }
+    
+    public static function sendEmail($mailArray = NULL)
+    {
+        /**
+         *  $mailArray = array (
+         *               'to'     => array(),
+         *               'cc'     => array(),
+         *               'bcc'    => array(),
+         *               'subject'=> string,
+         *               'body'   => string 
+         *           );
+         */
+        try {
+            if (is_array($mailArray)) {
+                
+                $sent = Mail::send([], [], function($message) use ($mailArray) {
+                   if (isset($mailArray['to']) && !empty($mailArray['to'])) { 
+                    $to = implode(',',$mailArray['to']);
+                   }
+                   if (isset($mailArray['cc']) && !empty($mailArray['cc'])) { 
+                    $cc = implode(',',$mailArray['cc']);
+                   }
+                   if (isset($mailArray['bcc']) && !empty($mailArray['bcc'])) { 
+                    $bcc = implode(',',$mailArray['bcc']);
+                   }
+                    $message->to($to)
+                        ->subject($mailArray['subject'])
+                        ->setBody($mailArray['body'], 'text/html');
+                });
+                
+            } else {
+
+            }
+        } catch(\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
+    /**
+     * @fun encrypt
+     * @desc This function will encrypt the value
+     * @param $plainValue
+     * @return string
+     */
+    public static function encrypt($plainValue) {
+        return Crypt::encrypt($plainValue);
+    }
+
+    /**
+     * @fun decrypt
+     * @desc This function will decrypt the value encrypted by encrypt function
+     * @param $encryptedValue
+     * @return string
+     */
+    public static function decrypt($encryptedValue) {
+        return Crypt::decrypt($encryptedValue);
     }
 }

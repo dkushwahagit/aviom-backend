@@ -43,7 +43,7 @@
                 <input type="checkbox" name="remember_me" id="checkbox">
                 <label for="checkbox">Remember me </label>
               </div>
-              <div class="clearfix"><a href="forgot-password.html">Forgot Password ?</a></div>
+              <div class="clearfix"><a href="{{url('/forgot-password')}}">Forgot Password ?</a></div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
