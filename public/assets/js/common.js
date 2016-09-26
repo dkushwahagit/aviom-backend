@@ -199,17 +199,21 @@ $(function(){
                             if(data.ERROR == false) {
                                 var msg = '<div class="alert alert-success msg-alert">'+data.RESPONSE_MSG+'</div>';
                                 $(msg).insertBefore(trg);
+                                $.fn.loader('close');
+                                $(trg).hide();
+                                setTimeout(function () { window.location.href=window.location.origin+'/';},2000);
                             }else{
                                 var msg = '<ul class="alert alert-danger msg-alert">';
                                 $.each(data.RESPONSE_MSG,function (index,err) {
                                     msg = msg+'<li>'+err+'</li>';
                                 });
                                 $(msg).insertBefore(trg);
+                                $.fn.loader('close');
                             }
-                            $(trg).hide();
                             
-                            $.fn.loader('close');
-                           setTimeout(function () { window.location.href=window.location.origin+'/';},2000);
+                            
+                            
+                           
                          },
             error      : function (jqXHR,statusText,errorThrown) {
                           alert(errorThrown);

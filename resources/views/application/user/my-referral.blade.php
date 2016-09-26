@@ -19,15 +19,15 @@
     @foreach($data['RESPONSE_DATA'] as $k => $v)      
         <div class="tile">
           <div class="panelHeader">
-            <h2>suresh tiwari</h2>
-            <div class="refId"> Ref ID <span>a4527</span></div>
+            <h2>{{$v['CName']}}</h2>
+            <div class="refId"> Ref ID <span>{{$v['LeadId'] or 'N/A'}}</span></div>
           </div>
           <div class="panelBody">
             <ul>
               <li>Mobile</li>
-              <li class="mobile">+91 - 9999999999</li>
+              <li class="mobile">{{$v['ContactNo']}}</li>
               <li>Email ID</li>
-              <li class="email"><a href="javascript:void(0)">suresh.tiwari@squareyrds.com</a></li>
+              <li class="email"><a href="javascript:void(0)">{{$v['EmailId']}}</a></li>
             </ul>
           </div>
           <div class="panelFooter">

@@ -614,7 +614,12 @@ class UserController extends Controller
     
     public function referralList () {
         $inputData = Input::all();
-        $records = DB::table('clientreferral')->where('CMId',$inputData['CMId'])->orWhere('ClientId',$inputData['ClientId'])->get();
+        $records = DB::table('clientreferral')
+                ->leftJoin('lead','clientreferral.ContactNo','=','lead.PhoneNumberD')
+                ->where('CMId',$inputData['CMId'])
+                ->orWhere('ClientId',$inputData['ClientId'])
+                ->select('lead.LeadID','clientreferral.*')
+                ->get();
         $records = collect($records)->all();
         if (!empty($records) && isset($records)) {
                 $result = array (
