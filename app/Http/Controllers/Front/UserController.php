@@ -60,7 +60,7 @@ class UserController extends Controller
                 if (!empty($result['RESPONSE_DATA']) && isset($result['RESPONSE_DATA'])) {
                     $boolResp = self::createUserSession($result['RESPONSE_DATA']); // creating session for user
                     if ($boolResp) {
-                    return redirect('/profile');
+                    return redirect('/my-properties');
                     }else {
                         return redirect('/')->with('error','session error !');
                     }
@@ -155,7 +155,11 @@ class UserController extends Controller
         
         if (isset($ClientId) && !empty($ClientId)) {
             $result = self::apiRequest('/my-credit-notes', 'GET', array('clientId' => $ClientId, 'cmId' => $cmId));
-            return view('application.user.my-credit-notes')->with('data',$result);
+            if (isset($result['RESPONSE_DATA']) && !empty($result['RESPONSE_DATA'])) {
+                return view('application.user.my-credit-notes')->with('data',$result);
+            }else{
+                return redirect('/my-properties');
+            }
         }else {
             return redirect('/logout');
         }
@@ -168,6 +172,12 @@ class UserController extends Controller
             //print_r($inputData); exit();
             if (isset($cmId) && !empty($cmId)) {
                 $result = self::apiRequest('/update-my-profile/'.$cmId, 'PUT', $inputData);
+                 if ($result['ERROR'] == false) {
+                        Session::forget('client_session.0.0.City');
+                        Session::forget('client_session.0.0.CountryName');
+                        Session::put('client_session.0.0.City',$inputData['City']);
+                        Session::put('client_session.0.0.CountryName',$inputData['CountryName']);
+                 }
                 return $result;
             }
         }

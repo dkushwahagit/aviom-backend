@@ -25,6 +25,21 @@ $.fn.loader = function(action){
 
 $(function(){
     var siteUrl = window.location.origin;
+    
+    $.ajax({
+        async       : false,
+        url         : siteUrl+'/index.php/Api/v1/my-credit-notes',
+        beforeSend  : function () {$.fn.loader('open');},
+        success     : function (data, statusText, jqXHR) { 
+                       if (data.ERROR) {
+                           $('#credit-notes-li').hide();
+                         }
+                        $.fn.loader('close');
+                    },
+        error       : function (jqXHR, statusText, errorThrown) {$.fn.loader('close');alert(errorThrown);}
+        
+    });
+    
     $('a.payment-plan').on('click', function (event) {
 
         var ach = event.target;
@@ -275,5 +290,6 @@ $(function(){
            error      : function (jqXHR,statusText,errorThrown) { alert(errorThrown);}
        });
    });
+   
    
 });

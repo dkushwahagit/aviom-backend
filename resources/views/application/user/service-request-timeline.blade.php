@@ -57,9 +57,10 @@
                     <p class="name">{{$v['enterBy']}}</p>
                     <span>{{ date('d M Y H:i',strtotime($v['createdDate'])) }}</span> </div>
                 </div>
-                <div class="row">
+                <div class="row interactionDetails">
                   <div class="col-sm-12">
-                    <p class="complaint">{{ substr($v['interactionDetails'],0,250) }}</p>
+                    <p class="complaint limited">{{ substr($v['interactionDetails'],0,250) }}</p>
+                    <p style="display: none;" class="complaint full">{{ $v['interactionDetails'] }}</p>
                   </div>
                 </div>
                 <div class="row">
@@ -74,7 +75,7 @@
              ?>
                         
                       </div>
-                      <div class="col-sm-6"> <a class="btn" href="javascript:void(0)">More</a> </div>
+                        <div class="col-sm-6"> <a class="btn" href="javascript:void(0)" onclick="var interactionDetails = $(this).parents('.row').parents('.row').prev('.interactionDetails');if($(this).text() == 'More'){$(' p.full',interactionDetails).show();$(' p.limited',interactionDetails).hide();$(this).text('Collapse')}else{$(' p.full',interactionDetails).hide();$(' p.limited',interactionDetails).show();$(this).text('More')}">More</a> </div>
                     </div>
                   </div>
                 </div>
