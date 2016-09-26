@@ -40,7 +40,7 @@
                       <td>{{$v['bspPerUnitSize']}} {{$v['measurementUnit']}}</td>
                       <td>{{$v['totalCost']}}</td>
                       <td>{{date('M Y',strtotime($v['dealClosedDate']))}}</td>
-                      <td><a href="javascript:void(0)" @if(isset($v['paymentPlan']) && !empty($v['paymentPlan']))  class="payment-plan" data-tcf-id="{{$v['tcfId']}}" data-client-id="{{$v['clientId']}}" @endif >{{ (isset($v['paymentPlan']) && !empty($v['paymentPlan']))?$v['paymentPlan'].'<em class="fa fa-angle-down"></em>':'N/A' }} </a></td>
+                      <td><a href="javascript:void(0)" @if(isset($v['paymentPlan']) && !empty($v['paymentPlan']))  class="payment-plan" data-tcf-id="{{$v['tcfId']}}" data-client-id="{{$v['clientId']}}" @endif >{{ (isset($v['paymentPlan']) && !empty($v['paymentPlan']))?$v['paymentPlan']<em class="fa fa-angle-down"></em>:'N/A' }} </a></td>
                     </tr>
                 @endforeach        
           
