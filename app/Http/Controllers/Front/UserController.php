@@ -293,7 +293,7 @@ class UserController extends Controller
         if(Input::hasFile('ticket-attachment')) {
                 $fileObj = Input::file('ticket-attachment');
                // echo $fileObj->getClientMimeType();                exit();
-                $ruleArr = array('ticket-attachment' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,jpeg,bmp,png,gif|min:10|max:2048');
+                $ruleArr = array('ticket-attachment' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,jpeg,bmp,png,gif|min:1|max:2048');
                 $validator = Validator::make($postData, $ruleArr);
                 
                 if ($validator->fails())

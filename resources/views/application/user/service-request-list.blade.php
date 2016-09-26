@@ -53,7 +53,7 @@
               <td><a class="ticket-interaction" data-interaction-id="{{$v['CIId']}}" href="javascript:void(0)">{{ $v['ticketNo'] }}</a></td>
               <td>{{ date('d-m-Y',strtotime($v['ticketDate'])) }}</td>
               <td>{{ $v['subject'] }}</td>
-              <td>{{ ($v['ticketStatus'] == 'O')?'Open':'Close' }}</td>
+              <td> @if($v['ticketStatus'] == 'O') Open @elseif($v['ticketStatus'] == 'R') Re-Open @else Close @endif</td>
             </tr>
          @endforeach
           </tbody>

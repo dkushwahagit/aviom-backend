@@ -580,6 +580,11 @@ class UserController extends Controller
             'MRefCIId'            => 'required',
             'LoginType'           => 'required'
             );
+        if ($inputData['RefCIId'] != '0') {
+            $statusObj = DB::table('clientinteraction')->where('CIId',$inputData['RefCIId'])->select('IStatus')->get();
+            $statusArr = collect($statusObj)->all();
+            $inputData['IStatus'] = ($statusArr[0]->IStatus == 'O')?'O':'R';
+        }
         $validator = Validator::make($inputData,$rulesArr);
         if ($validator->fails()) {
             $errors = $validator->errors();
@@ -591,13 +596,17 @@ class UserController extends Controller
                     return $result;
         }
         $records = DB::table('clientinteraction')->insertGetId($inputData);
+        $msg = 'Ticket Generated Successfully';
         if ($inputData['RefCIId'] != '0') {
-            $records = DB::table('clientinteraction')->where('clientinteraction.CIId',$inputData['RefCIId'])->update(['IStatus' => 'C']);
+            $refCIId = $inputData['RefCIId'];
+                      
+            $records = DB::table('clientinteraction')->where('clientinteraction.CIId',$refCIId)->update(['IStatus' => 'C']);
+            $msg = 'Message Sent Successfully';
         }
         if (!empty($records) && isset($records)) {
                 $result = array (
                     'ERROR'         => false,
-                    'RESPONSE_MSG'  => 'Ticket Generated Successfully',
+                    'RESPONSE_MSG'  => $msg,
                     'RESPONSE_DATA' => $records
                 );
             }else {
