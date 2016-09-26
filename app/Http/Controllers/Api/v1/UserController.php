@@ -603,7 +603,7 @@ class UserController extends Controller
             $records = DB::table('clientinteraction')->where('clientinteraction.CIId',$refCIId)->update(['IStatus' => 'C']);
             $msg = 'Message Sent Successfully';
         }
-        if (!empty($records) && isset($records)) {
+        if ((!empty($records) && isset($records)) || ($records == '0')) {
                 $result = array (
                     'ERROR'         => false,
                     'RESPONSE_MSG'  => $msg,
