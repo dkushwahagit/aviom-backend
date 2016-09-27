@@ -1,3 +1,7 @@
+*::-moz-scrollbar{width:8px; height:8px; background-color:rgba(255,255,255,0.1);position:absolute;z-index:10000;right:0}
+*::-moz-scrollbar-thumb{background-color:#BCBCBC; }
+*::-webkit-scrollbar{width:8px; height:8px; background-color:rgba(255,255,255,0.1);position:absolute;z-index:10000;}
+*::-webkit-scrollbar-thumb{background-color:#BCBCBC;}
 @font-face{font-family:'proxima_nova_rgbold';src:url(../fonts/proxima-nova-bold-webfont.woff2) format("woff2"),url(../fonts/proxima-nova-bold-webfont.woff) format("woff");font-weight:400;font-style:normal}
 @font-face{font-family:'proxima_nova_rgregular';src:url(../fonts/proxima-nova-regular-webfont.woff2) format("woff2"),url(../fonts/proxima-nova-regular-webfont.woff) format("woff");font-weight:400;font-style:normal}
 @font-face{font-family:'proxima_nova_ltsemibold';src:url(../fonts/proxima-nova-semibold-webfont.woff2) format("woff2"),url(../fonts/proxima-nova-semibold-webfont.woff) format("woff");font-weight:400;font-style:normal}
@@ -51,7 +55,7 @@ footer ul li:first-child{padding-left:0;font-family:'proxima_nova_ltsemibold';bo
 footer ul li a{display:block;color:#c3c3c3}
 footer ul li a:hover{color:#fff;text-decoration:none}
 footer .copy{text-align:right;display:block;color:#c3c3c3;line-height:38px}
-.loginBox{padding:150px 0;margin-top:90px;display:block;background:#0098da url(../images/login-bg.png) no-repeat center bottom}
+.loginBox{padding:40px 0;margin-top:90px;display:block;background:#0098da url(../images/login-bg.png) no-repeat center bottom}
 .loginBox .box{margin:0 auto;width:400px;background:#fff;border-radius:3px}
 .loginBox .box .panelHeader{display:block;text-align:center;background:#5b2984;font-family:'proxima_nova_rgbold';color:#fff;line-height:55px;font-size:22px;border-radius:3px 3px 0 0}
 .loginBox .box .panelBody{display:block}
@@ -95,6 +99,7 @@ footer .copy{text-align:right;display:block;color:#c3c3c3;line-height:38px}
 .cloudTag h4{padding:5px 0;margin:0;display:block;border-bottom:#f1f1f1 solid 1px;text-transform:uppercase}
 .cloudTag ul{padding-top:15px;display:block}
 .cloudTag ul li{padding:5px 15px;display:inline-block;background:#d9d8d8;color:#414141;font-size:14px;border-radius:30px;cursor:pointer}
+.cloudTag ul li.active{ background:#fff; border:1px solid #d9d8d8; color:#333333;}
 .cloudTag ul li:first-child{padding:5px;width:120px;background:#fff;cursor:default}
 .form-group .form-control-file{margin-top:5px!important;display:block}
 

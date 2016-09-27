@@ -212,13 +212,15 @@ $('body').on('click','.option li',function(){
 	
 </script>
 <script>
+    var projectsApiUrl = 'http://api.squareyards.com/SquareYards/site/city/dsesort/';
+    //var projectsApiUrl = 'http://api-uat.squareyards.com/SquareYards/site/city/dsesort/';
     $('#MostWellConnected').click(function () {
        var projectIdStr = '<?php echo implode(',', $projectIdsArr)?>';    
        $.ajax({
            async     : false,
            type      : 'GET',
            dataType  : 'json',
-           url       : 'http://api-uat.realizing.in:8080/SquareYards/site/city/dsesort/'+projectIdStr+'/DSE_KEY_1',
+           url       : projectsApiUrl+projectIdStr+'/DSE_KEY_1',
            success   : function (data,statusText,jqXHR) {
                          var sortedArr = data.retData;
                           var newHtml = '';
@@ -239,7 +241,7 @@ $('body').on('click','.option li',function(){
            async     : false,
            type      : 'GET',
            dataType  : 'json',
-           url       : 'http://api-uat.realizing.in:8080/SquareYards/site/city/dsesort/'+projectIdStr+'/DSE_KEY_2',
+           url       : projectsApiUrl+projectIdStr+'/DSE_KEY_2',
            success   : function (data,statusText,jqXHR) {
                          var sortedArr = data.retData;
                           var newHtml = '';
@@ -260,7 +262,7 @@ $('body').on('click','.option li',function(){
            async     : false,
            type      : 'GET',
            dataType  : 'json',
-           url       : 'http://api-uat.realizing.in:8080/SquareYards/site/city/dsesort/'+projectIdStr+'/DSE_KEY_3',
+           url       : projectsApiUrl+projectIdStr+'/DSE_KEY_3',
            success   : function (data,statusText,jqXHR) {
                          var sortedArr = data.retData;
                           var newHtml = '';
@@ -281,7 +283,7 @@ $('body').on('click','.option li',function(){
            async     : false,
            type      : 'GET',
            dataType  : 'json',
-           url       : 'http://api-uat.realizing.in:8080/SquareYards/site/city/dsesort/'+projectIdStr+'/DSE_KEY_7',
+           url       : projectsApiUrl+projectIdStr+'/DSE_KEY_7',
            success   : function (data,statusText,jqXHR) {
                          var sortedArr = data.retData;
                           var newHtml = '';

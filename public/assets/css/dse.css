@@ -155,7 +155,7 @@
 .dsePage .mostUseful{padding:15px 18px;display:block}
 .dsePage .mostUseful.clearfix{padding:0 18px;margin:0;display:block}
 .dsePage .mostUseful.clearfix h3{margin:0;float:left;font-size:18px;line-height:38px;color:#464646}
-.dsePage .mostUseful.clearfix .usefullTag{padding:5px 8px;margin:5px 20px 0 0;display:block;float:right;background:#12b5aa;position:relative;font-size:13px;text-transform:uppercase;color:#fff;border-radius:3px}
+.dsePage .mostUseful.clearfix .usefullTag{padding:5px 8px;margin:2px 20px 0 0;display:block;float:right;background:#12b5aa;position:relative;font-size:13px;text-transform:uppercase;color:#fff;border-radius:3px}
 .dsePage .mostUseful.clearfix .usefullTag::before{content:'';position:absolute;top:6px;right:-7px;font-size:15px;color:#fff;float:left;border-top:8px solid transparent;border-left:10px solid #12b5aa;border-bottom:8px solid transparent}
 .dsePage .mostUseful.clearfix .usefullTag small{margin-top:2px;display:block}
 .dsePage .PriceSelectBox{float:right;position:relative}
@@ -164,7 +164,7 @@
 .dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select{position:relative;float:right;display:block}
 .dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select.open .dropdown-menu::after{display:none}
 .dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button{padding:5px 35px 5px 38px;background:#ee2f37;color:#fff;float:right;position:relative;max-width:inherit}
-.dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button::before{content:'';position:absolute;top:5px;left:14px;font-size:15px;color:#fff;float:left;font-family:'icomoon'}
+.dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button::before{content:'';position:absolute;top:5px;left:14px;font-size:15px;color:#fff;float:left;font-family:'FontAwesome'}
 .dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button::after{right:8px;color:#fff}
 .dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select.open .dropdown-menu::after{left:inherit;right:15px}
 .dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select .dropdown-menu{right:0;min-width:186px;box-shadow:0 1px 12px rgba(0,0,0,0.2);border:none}
@@ -213,15 +213,20 @@
 .dsePage .viewFilterBox{width:80%}
 .dsePage .viewFilterBox .actionBox{padding:15px 20px}
 }
+@media screen and (max-width:736px) {
+	.dsePage .listingBox .tileListingBox .tile, .dsePage .listingBox .tileListingBox .tile .card .back ul { height:395px;}
+	}
 @media screen and (max-width:640px) {
 .dsePage .viewFilterBox{width:90%}
 .dsePage .viewFilterBox .filterSectionBox .tabs{overflow:hidden;overflow-y:auto}
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label span{max-width:250px}
+.dsePage .listingBox .tileListingBox .tile { width:46%;}
 }
 @media screen and (max-width:480px) {
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label span{max-width:175px}
 .dsePage .viewFilterBox .filterSectionBox .tab-content .priceFilterBox .sqRangeSlider .irs-slider{top:15px!important}
 .dsePage .mostUseful.clearfix h3{font-size:15px}
+.dsePage .listingBox .tileListingBox .tile {margin:15px 0 0; width:100%;}
 }
 @media screen and (max-width:435px) {
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label span{max-width:140px}
@@ -232,6 +237,7 @@
 }
 @media screen and (max-width:412px) {
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label span{max-width:135px}
+	.dsePage .listingBox .tileListingBox .tile, .dsePage .listingBox .tileListingBox .tile .card .back ul { height:364px;}
 }
 @media screen and (max-width:376px) {
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label span{max-width:115px}
@@ -243,5 +249,7 @@
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label{font-size:12px}
 .dsePage .viewFilterBox .filterSectionBox .tab-content .checkBox label span{max-width:102px}
 .dsePage .viewFilterBox .filterSectionBox .tab-content .priceFilterBox .sqRangeSlider{margin:2px 15px 0}
-.dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button{width:286px}
+.dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button{width:286px;}
+.dsePage .PriceSelectBox .dropDownSelectBox .input-group-btn.select button::before{right:12px; left:inherit;}
+
 }

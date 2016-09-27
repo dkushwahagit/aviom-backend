@@ -57,7 +57,7 @@
     @endforeach   
     
     @else
-    <div class="alert alert-danger"> No Record Found !.</div>
+    <div style="margin:0px 15px;" class="alert alert-danger"> No Record Found !.</div>
     @endif
       </div>
       <div class="blankTile"></div>
@@ -137,3 +137,7 @@
 
 @endsection  {{-- content Section ends here --}}
 
+@push('scripts')
+    <script src="{{ asset("assets/js/function.js") }}" type="text/javascript"></script>
+    
+@endpush

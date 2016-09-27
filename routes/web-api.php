@@ -24,6 +24,7 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::get('/exclusive-deals', 'UserController@displayExclusiveDeals');
     Route::get('/city-list', 'UserController@cityList');
     Route::put('/reset-password', 'UserController@resetPassword');
+    Route::put('/reset-forgot-password', 'UserController@resetForgotPassword');
     Route::get('/service-request-list', 'UserController@serviceRequestList');
     Route::get('/service-request-detail', 'UserController@serviceRequestDetails');
     Route::post('/generate-service-ticket','UserController@generateServiceRequest');
@@ -31,5 +32,6 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::get('/my-referral-list','UserController@referralList');
     Route::post('/add-referral','UserController@addReferral');
     Route::get('/get-client-master-id-by-email/{emailId}','UserController@getCMIdByEmail');
-    
+    Route::put('/set-pwd-flag/{cmId}', 'UserController@setPwdResetFlag');
+    Route::put('/unset-pwd-flag/{cmId}', 'UserController@unsetPwdResetFlag');
 });
