@@ -707,7 +707,12 @@ class UserController extends Controller
     
     public function getCMIdByEmail ($email = null) {
         
-        $records = ClientMasterModel::where('EmailId',$email)->select('CMId')->first();
+        $records = DB::table('clientmaster')
+                   ->join('clientlogin','clientlogin.CMId','clientmaster.CMId')
+                   ->where('clientmaster.EmailId',$email)
+                   ->where('clientlogin.IsActive',1)
+                   ->select('clientmaster.CMId As CMId')
+                   ->first();
         $records = collect($records)->all();
         if (!empty($records) && isset($records)) {
             $result = array (
@@ -724,4 +729,92 @@ class UserController extends Controller
         }
         return $result;
     }
+    
+    public function setPwdResetFlag ($cmId) {
+        
+        $records = DB::table('clientlogin')
+                   ->where('clientlogin.CMId',$cmId)
+                   ->update(array('PwdResetFlag' => '1'));
+        
+        if (in_array($records,[0,1])) {
+            $result = array (
+                'ERROR'         => false,
+                'RESPONSE_MSG'  => 'Password flag is set',
+                'RESPONSE_DATA' => $records
+            );
+        }else {
+            $result = array (
+                'ERROR'         => true,
+                'RESPONSE_MSG'  => 'No Data found',
+                'RESPONSE_DATA' => ''
+            );
+        }
+        return $result;
+    }
+    
+    public function unsetPwdResetFlag ($cmId) {
+        
+        $records = DB::table('clientlogin')
+                   ->where('clientlogin.CMId',$cmId)
+                   ->update(array('PwdResetFlag' => '0'));
+        
+        if (in_array($records,[0,1])) {
+            $result = array (
+                'ERROR'         => false,
+                'RESPONSE_MSG'  => 'Password flag is unset',
+                'RESPONSE_DATA' => $records
+            );
+        }else {
+            $result = array (
+                'ERROR'         => true,
+                'RESPONSE_MSG'  => 'No Data found',
+                'RESPONSE_DATA' => ''
+            );
+        }
+        return $result;
+    }
+    
+    public function resetForgotPassword (Request $request) {
+        
+        $inputData = Input::all();
+        $rulesArr = array (
+            'CMId'             => 'required',
+            'password'         => 'required|confirmed',
+            'password_confirmation' => 'required'
+        );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        
+        //$updateData = array('Password' => 'AES_DECRYPT("'.$inputData['password'].'","mysquareyards")');
+        $records = DB::table('clientlogin')
+              ->where('clientlogin.CMId',$inputData['CMId'])
+              ->where('clientlogin.IsActive',1)
+              ->where('clientlogin.PwdResetFlag',1)   
+              ->update(['Password' => DB::raw('AES_ENCRYPT("'.$inputData['password'].'","mysquareyards")'),'PwdResetFlag' => '0']);
+        
+        if ($records == '1') {
+            $result = array (
+                'ERROR'         => false,
+                'RESPONSE_MSG'  => 'Password Updated Successfully.',
+                'RESPONSE_DATA' => $records
+            );
+        }else {
+            $result = array (
+                'ERROR'         => true,
+                'RESPONSE_MSG'  => 'Sorry, Reset Password Link Expired',
+                'RESPONSE_DATA' => $records
+            );
+        }
+       
+        return $result;
+    }
+    
 }

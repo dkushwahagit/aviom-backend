@@ -372,14 +372,18 @@ class UserController extends Controller
             
             $inputData = Input::all();
             $record = self::apiRequest('/get-client-master-id-by-email/'.$inputData['email'], 'GET');
+            
             if ($record['ERROR'] === false) {
+                $cmId = $record['RESPONSE_DATA']['CMId'];
+                self::apiRequest('/set-pwd-flag/'.$cmId, 'PUT');
                 $encryptedEmail = self::encrypt($inputData['email']);
                 $url = url('/forgot-password/'.$encryptedEmail);
-                $link = "<a href='{$url}'>Click Here To Reset Your Password</a>";
+                $body = view('application.user.forget-password-email-template')->with('url',$url);
+                //$link = "<a href='{$url}'>Click Here To Reset Your Password</a>";
                 $mailArray = array (
                     'to'      => $inputData,
                     'subject' => 'Reset Mysquareyards Password Link',
-                    'body'    => 'Hi Folk, <br/> Please click the below link to reset your password.<br/><br/><br/>'.$link
+                    'body'    => $body
                 );
                 self::sendEmail($mailArray);
                 return view('application.user.forget-password')->with('email_success','Email Sent, Please check your inbox!');
@@ -401,7 +405,7 @@ class UserController extends Controller
              
              if ($record['ERROR'] === false) {
              $cmId = $record['RESPONSE_DATA']['CMId'];    
-             $result = self::apiRequest('/reset-password', 'PUT', array('CMId'=>$cmId,'password_confirmation' => $inputData['password_confirmation'],'password' => $inputData['password']));
+             $result = self::apiRequest('/reset-forgot-password', 'PUT', array('CMId'=>$cmId,'password_confirmation' => $inputData['password_confirmation'],'password' => $inputData['password']));
              return $result;
              }else {
                  return $record;

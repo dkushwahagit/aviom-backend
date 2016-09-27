@@ -210,20 +210,24 @@ $(function(){
             data       : $(this).serialize(),
             beforeSend : function () {$.fn.loader('open');},
             success    : function (data,statusText,jqXHR) {
+                            $.fn.loader('close');
                             if($('.msg-alert').length > 0){$('.msg-alert').detach(); }
                             if(data.ERROR == false) {
                                 var msg = '<div class="alert alert-success msg-alert">'+data.RESPONSE_MSG+'</div>';
                                 $(msg).insertBefore(trg);
-                                $.fn.loader('close');
                                 $(trg).hide();
                                 setTimeout(function () { window.location.href=window.location.origin+'/';},2000);
                             }else{
                                 var msg = '<ul class="alert alert-danger msg-alert">';
-                                $.each(data.RESPONSE_MSG,function (index,err) {
-                                    msg = msg+'<li>'+err+'</li>';
-                                });
+                                if (typeof data.RESPONSE_MSG != 'string'){
+                                    $.each(data.RESPONSE_MSG,function (index,err) {
+                                        msg = msg+'<li>'+err+'</li>';
+                                    });
+                                }else{
+                                    msg = msg+'<li>'+data.RESPONSE_MSG+'</li>';
+                                }    
                                 $(msg).insertBefore(trg);
-                                $.fn.loader('close');
+                               
                             }
                             
                             
