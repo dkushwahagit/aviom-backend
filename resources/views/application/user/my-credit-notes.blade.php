@@ -33,9 +33,9 @@
               <td>{{ $v['clientName'] }}</td>
               <td>{{ $v['builderName'] }}</td>
               <td>{{ $v['projectName'] }}</td>
-              <td>{{ $v['bookingDate'] }}</td>
+              <td>{{ date('d M Y',strtotime($v['bookingDate'])) }}</td>
               <td>{{ $v['amount'] }}</td>
-              <td>{{ $v['issueDate'] }}</td>
+              <td>{{ date('d M Y',strtotime($v['issueDate'])) }}</td>
             </tr>
            @endforeach
           </tbody>

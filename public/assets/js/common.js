@@ -25,10 +25,12 @@ $.fn.loader = function(action){
 
 $(function(){
     var siteUrl = window.location.origin;
-    
+    var clientId = $('#credit-notes-li').data('clientId');
+    var cmId     = $('#credit-notes-li').data('cmId');
     $.ajax({
         async       : false,
         url         : siteUrl+'/index.php/Api/v1/my-credit-notes',
+        data        : {clientId:clientId,cmId:cmId},
         beforeSend  : function () {$.fn.loader('open');},
         success     : function (data, statusText, jqXHR) { 
                        if (data.ERROR) {

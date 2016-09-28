@@ -1,6 +1,6 @@
 @extends('layout.dashboard-layout')
 
-@section('title', 'My Profile')
+@section('title', 'My Properties')
 
 @push('styles')
 <link href="{{asset('assets/css/my-profile.css')}}" rel="stylesheet" type="text/css">

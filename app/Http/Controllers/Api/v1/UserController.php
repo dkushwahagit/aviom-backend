@@ -671,9 +671,9 @@ class UserController extends Controller
         $rulesArr = array (
             'ClientId'            => 'required',
             'CName'               => 'required',
-            'ContactNo'           => 'required|unique:clientreferral',
+            'ContactNo'           => 'required|unique:clientreferral|integer',
             'EmailId'             => 'required|unique:clientreferral',
-            'City'                => 'required',
+            'City'                => '',
             'CMId'                => 'required'
             );
         $validator = Validator::make($inputData,$rulesArr);
