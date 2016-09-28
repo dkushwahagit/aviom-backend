@@ -245,6 +245,11 @@ $(function(){
     $('.ticket-interaction').click(function (e) {
         e.preventDefault();
         var parentTr = $(this).parents('tr');
+        var timelinetr = $(parentTr).next('.time-line-tr');
+        if(timelinetr.length != 0) {
+            timelinetr.detach();
+            return true;
+        }
         var ciid = $(this).data('interactionId');
         $.ajax({
             async    : false,
@@ -253,7 +258,7 @@ $(function(){
             success  : function (data,statusText,jqXHR) {
                            //alert(data);
                            //$(data).insertAfter('.table-responsive');
-                           $('<tr><td colspan="4" style="background:#fff;">'+data+'</td></tr>').insertAfter(parentTr);
+                           $('<tr class="time-line-tr"><td colspan="4" style="background:#fff;">'+data+'</td></tr>').insertAfter(parentTr);
                            $('.timelineBox').width($('.table-responsive').width()-40);
                            $.fn.loader('close');
             },

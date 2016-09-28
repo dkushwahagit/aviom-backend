@@ -672,7 +672,7 @@ class UserController extends Controller
             'ClientId'            => 'required',
             'CName'               => 'required',
             'ContactNo'           => 'required|unique:clientreferral|integer',
-            'EmailId'             => 'required|unique:clientreferral',
+            'EmailId'             => 'required|unique:clientreferral|email',
             'City'                => '',
             'CMId'                => 'required'
             );

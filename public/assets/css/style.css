@@ -18,7 +18,7 @@ body{background:#f6f6f6}
 html,body{position:relative;height:100%}
 header{position:absolute;top:0;width:100%;z-index:99;transition:.5s;border-bottom:#e9e9e9 solid 1px;height:90px;background:#fff;-webkit-box-shadow:0 1px 10px 0 rgba(0,0,0,0.06);box-shadow:0 1px 10px 0 rgba(0,0,0,0.06)}
 header .logoBox{padding:14px 0;display:block}
-header .logoBox a{outline:none}
+header .logoBox a{outline:none;display:inline-block;}
 nav{padding:20px 0;display:block}
 nav ul{display:block}
 nav ul li{margin-bottom:10px;display:block;position:relative}

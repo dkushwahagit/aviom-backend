@@ -44,35 +44,39 @@ class UserController extends Controller
      * @return type null
      */
     public function login (Request $request) {
-        if ($request->isMethod('POST')) {
-            $inputData = Input::all();
-            $rules = array (
-                'username'  => 'required',
-                'password'  => 'required'
-            );
-            
-            $validator = Validator::make($inputData,$rules); //validating user inputs
-            
-            if ($validator->fails()) {
-                return redirect('/')->withErrors($validator)->withInput();
-            }else {
-                $result = self::apiRequest('/verify-password','GET',$inputData);
-                if (!empty($result['RESPONSE_DATA']) && isset($result['RESPONSE_DATA'])) {
-                    $boolResp = self::createUserSession($result['RESPONSE_DATA']); // creating session for user
-                    if ($boolResp) {
-                    return redirect('/my-properties');
-                    }else {
-                        return redirect('/')->with('error','session error !');
-                    }
+       if(!Session::has('client_session')) {
+            if ($request->isMethod('POST')) {
+                $inputData = Input::all();
+                $rules = array (
+                    'username'  => 'required',
+                    'password'  => 'required'
+                );
+
+                $validator = Validator::make($inputData,$rules); //validating user inputs
+
+                if ($validator->fails()) {
+                    return redirect('/')->withErrors($validator)->withInput();
                 }else {
-                     return redirect()->back()->withErrors(['error' => 'Invalid user credentials']);
-                }    
-                
-                
+                    $result = self::apiRequest('/verify-password','GET',$inputData);
+                    if (!empty($result['RESPONSE_DATA']) && isset($result['RESPONSE_DATA'])) {
+                        $boolResp = self::createUserSession($result['RESPONSE_DATA']); // creating session for user
+                        if ($boolResp) {
+                        return redirect('/my-properties');
+                        }else {
+                            return redirect('/')->with('error','session error !');
+                        }
+                    }else {
+                         return redirect()->back()->withErrors(['error' => 'Invalid user credentials']);
+                    }    
+
+
+                }
+            }else {
+                return view('application.user.login');
             }
-        }else {
-            return view('application.user.login');
-        }
+       }else{
+           return redirect('/my-properties');
+       }
     }
     
     /**
