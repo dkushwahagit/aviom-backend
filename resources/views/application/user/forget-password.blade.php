@@ -13,13 +13,15 @@
     <div class="box">
       @if(isset($email_success) && !empty($email_success))  
       <div class="alert alert-success"> {{$email_success}} </div>
-      @elseif(isset($email_error) && !empty($email_error))  
-      <div class="alert alert-danger"> {{$email_error}} </div>
-       @endif
+      
+        @else 
       <div class="panelHeader">FORGOT PASSWORD</div>
       <div class="panelBody">
          
         <div class="tagLine"><span>Forgot your password? No problem.</span></div>
+        @if(isset($email_error) && !empty($email_error))  
+          <div class="alert alert-danger"> {{$email_error}} </div>
+        @endif  
         <form method="post" action="{{url('/forgot-password')}}">
           <div class="clearfix">
             <div class="form-group">
@@ -31,7 +33,7 @@
           </div>
         </form>
       </div>
-      
+      @endif
     </div>
   </div>
 </div>
