@@ -14,7 +14,7 @@
             <tr bgcolor="#ffffff">
               <td width="281" height="70" align="left" valign="middle" style="padding-left:15px; padding-top:5px;" scope="col"><a href="" target="_blank">
               <img src="{{ asset('/images/logo.jpg') }}" width="218" height="50" alt="logo"></a></td>
-              <td width="319" align="right" valign="middle" style="color:#333333; padding-right:15px; font-size:16px;" scope="col"><a href="javascript:void(0)/" style="color:#333333; text-decoration:none;" target="_blank">www.my.squareyards.com</a></td>
+              <td width="319" align="right" valign="middle" style="color:#333333; padding-right:15px; font-size:16px;" scope="col"><a href="javascript:void(0)/" style="color:#333333; text-decoration:none;" target="_blank">my.squareyards.com</a></td>
             </tr>
             <tr>
               <td colspan="2" scope="col"><img src="{{asset('/images/banner.jpg')}}" width="600" height="238" alt="banner"></td>

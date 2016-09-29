@@ -138,6 +138,24 @@
 @endsection  {{-- content Section ends here --}}
 
 @push('scripts')
+<script>
+$(".referralBox .tile .panelFooter ul li.moreTag").click(function() {
+			var $this = $(this);
+			if ($(this).hasClass("active")) {
+				$(this).removeClass("active");
+			} else {
+				$(".referralBox .tile .panelFooter ul li.moreTag").removeClass("active");
+				$(this).toggleClass("active");
+			}
+			
+			if ($(this).parents('.referralBox .tile .panelFooter ul').hasClass('active')) {
+				$(this).parents('.referralBox .tile .panelFooter ul').removeClass('active');
+			} else {
+				$('.referralBox .tile .panelFooter ul').removeClass('active');
+				$(this).parents('.referralBox .tile .panelFooter ul').toggleClass('active');
+			}
+		});
+	</script>
     <script src="{{ asset("assets/js/function.js") }}" type="text/javascript"></script>
     
 @endpush
