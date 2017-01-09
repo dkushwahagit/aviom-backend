@@ -184,6 +184,7 @@ return [
         
         // Added by Parveen Yadav for curl 
         Ixudra\Curl\CurlServiceProvider::class,
+        willvincent\Feeds\FeedsServiceProvider::class,
     ],
 
     /*
@@ -229,8 +230,9 @@ return [
         'Storage' => Illuminate\Support\Facades\Storage::class,
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View' => Illuminate\Support\Facades\View::class,
-        'Curl'          => Ixudra\Curl\Facades\Curl::class,
+        'View'  => Illuminate\Support\Facades\View::class,
+        'Curl'  => Ixudra\Curl\Facades\Curl::class,
+        'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
     ],
 
 ];

@@ -57,11 +57,10 @@ class UserController extends Controller
                    ->where('clientlogin.IsActive',1)
                    ->whereRaw('clientlogin.Password = AES_ENCRYPT("'.$inputData['password'].'","mysquareyards")')
                    ->leftJoin('clientmaster', 'clientlogin.CMId', '=', 'clientmaster.CMId')
-                   ->select('clientlogin.ClientLoginId','clientlogin.UserName','clientlogin.ClientId','clientlogin.CMId',
+                   ->select('clientlogin.ClientLoginId','clientlogin.UserName','clientlogin.ClientId','clientlogin.CMId','clientlogin.clientType',
                             'clientmaster.CName','clientmaster.City','clientmaster.CountryName','clientmaster.CImage')
                    ->get();
         $records = collect($records)->all();
-        //return $records;
         if (!empty($records) && isset($records)) {
             $result = array (
                 'ERROR'         => false,

@@ -34,4 +34,6 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::get('/get-client-master-id-by-email/{emailId}','UserController@getCMIdByEmail');
     Route::put('/set-pwd-flag/{cmId}', 'UserController@setPwdResetFlag');
     Route::put('/unset-pwd-flag/{cmId}', 'UserController@unsetPwdResetFlag');
+    Route::get('/my-investments', 'UserController@displayAllProperty');
+    
 });

@@ -51,7 +51,6 @@ class UserController extends Controller
                     'username'  => 'required',
                     'password'  => 'required'
                 );
-
                 $validator = Validator::make($inputData,$rules); //validating user inputs
 
                 if ($validator->fails()) {
@@ -61,6 +60,12 @@ class UserController extends Controller
                     if (!empty($result['RESPONSE_DATA']) && isset($result['RESPONSE_DATA'])) {
                         $boolResp = self::createUserSession($result['RESPONSE_DATA']); // creating session for user
                         if ($boolResp) {
+                            /*$clientType = Session::get('client_session.0.0.clientType');
+                           // return $clientType;
+                            if($clientType=='INVESTOR'){
+                                return "Welcome Investor";
+                                //return redirect('/my-properties');        
+                            }*/ 
                         return redirect('/my-properties');
                         }else {
                             return redirect('/')->with('error','session error !');
@@ -414,6 +419,18 @@ class UserController extends Controller
              }else {
                  return $record;
              }
+        }
+    }
+
+
+    public function displayMyAllInvestments() {
+        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
+        
+        if (isset($ClientId) && !empty($ClientId)) {
+            $result = self::apiRequest('/my-investments', 'GET', array('ClientId' => $ClientId));
+            return view('application.user.investments.my-investments')->with('data',$result);
+        }else {
+            return redirect('/logout');
         }
     }
 }
