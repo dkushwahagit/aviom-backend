@@ -9,13 +9,20 @@
 
 @section('content')
 
-  
+  <?php
+  //echo "<pre>";print_r(Session::get('client_session'));
+           // echo "<pre>";print_r($data[0]['BookingId']);
+//            echo $data->BookingId 
+           //die;
+  ?>
   <div class="rightBox">
     <h1>My Profile</h1>
     <div class="profileBox">
+     <?php if(Session::get('client_session.0.0.clientType') == 'BUYER'){?>   
       <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <?php 
+            
              $img = Session::get('client_session.0.0.CImage');
              $awsObj = Illuminate\Support\Facades\Storage::disk('s3');
              $isExists = $awsObj->exists('/customer/profilepic/'.$img); 
@@ -256,6 +263,183 @@
             </form>
         </div>
       </div>
+     <?php }else{ ?> 
+        <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            
+          <div class="imgBox">
+            <div class="userImg">
+              <div class="circul">
+                <figure> <img src="{{ asset('/images/default.png') }}" alt="" class="img-circle img-responsive"> </figure>
+              </div>
+                
+            </div>
+            <div class="userName">
+              <p>{{ $data[0]->CustomerName}} </p>
+              <div class="cameraIcon"> <a href="javascript:void(0)"><em class="fa fa-camera"></em></a> </div>
+            </div>
+            <div class="information">
+              <ul>
+                <li><em class="icon-mobile"></em> {{ $data[0]->Phone}}</li>
+                <li><em class="icon-email"></em> {{ $data[0]->Email}}</li>
+              </ul>
+            </div>
+            <a class="editBtn profile-btn-app-form" href="javascript:void(0)" role="button">Save profile</a> </div>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <form method="post" action="" enctype="multipart/form-data" id="profile-form-app-form">  
+                <div class="formBox">
+            <div class="row">
+              
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                    <label><b>Client Personal Detail</b></label>
+               </div>
+              </div>
+            </div>
+                    
+            <div class="row">
+              
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-mobile"></em>Mobile No</label>
+                  <input type="text" id="Phone" class="form-control" placeholder="Enter mobile no" name="Phone" value="{{ $data[0]->Phone}}">
+                </div>
+              </div>
+                
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-mobile"></em>Alternate Mobile No</label>
+                  <input type="text" id="AlternateMobileNo" class="form-control" placeholder="Enter alternate mobile no" name="AlternateMobileNo" value="{{ $data[0]->AlternatePhone}}">
+                </div>
+              </div>  
+              
+            </div>        
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-city"></em>City </label>
+                  <input type="text" id="City" name="City" class="form-control" placeholder="Enter current city" value="{{ $data[0]->City}}">
+                  
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-address"></em>Address</label>
+                  <input type="text" id="Address" class="form-control" placeholder="Enter current  address" name="Address" value="{{ $data[0]->Address}}">
+                </div>
+              </div>
+            </div>        
+            
+            
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-city"></em>BLANK </label>
+                  <input type="text" id="IBAN" name="IBAN" value="blank" class="form-control" placeholder="Enter current IBAN">
+                  
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-address"></em>Country</label>
+                  <input type="text" id="CountryName" name="Country" value="{{ $data[0]->Country }}" class="form-control" placeholder="Enter country name">
+                  
+                </div>
+              </div>
+            </div>
+            
+                    
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                    <label><b>Bank Detail</b></label>
+                </div>
+                
+              </div>
+                 
+            </div>
+                    
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-company--name"></em>Passport No</label>
+                  <input type="text" id="CompanyName" class="form-control" placeholder="Enter passport number" name="PassportNo" value="{{ $data[0]->PassportNo }}" >
+                </div>
+              </div>
+                
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-company--name"></em>Passport No</label>
+                  <input type="text" id="CompanyName" class="form-control" placeholder="Enter passport number" name="PassportNo" value="{{ $data[0]->PassportNo }}" >
+                </div>
+              </div>  
+            </div>
+                    
+                    
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-gross-salary"></em>Swift Code</label>
+                  <input type="text" id="GrossSalary" class="form-control" placeholder="Enter Swift Code" name="SwiftCode" value="{{ $data[0]->SwiftCode }}" >
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-other-rental-income"></em>blank field</label>
+                  <input type="text" id="ConversionRate" class="form-control" placeholder="0" name="ConversionRate" value="blank feild val">
+                </div>
+              </div>
+              
+            </div>
+                    
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-gross-salary"></em>Bank Address</label>
+                  <input type="text" id="BankAddress" class="form-control" placeholder="Enter Bank Address" name="BankAddress" value="{{ $data[0]->BankAddress }}" >
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-other-rental-income"></em>blank</label>
+                  <input type="text" id="BlockingAmount" class="form-control" placeholder="0" name="BlockingAmount" value="blank value">
+                </div>
+              </div>
+              
+            </div>        
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label><em class="icon-dob"></em>Account Name</label>
+                      <input type="text" id="AccountName" class="form-control" placeholder="Enter Account Name" value="{{ $data[0]->AccountName }}" name="AccountName">
+                    </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                      <label><em class="icon-dob"></em>Account No</label>
+                      <input type="text" id="AccountNo" class="form-control" placeholder="Enter Account No" name="AccountNo" value="{{ $data[0]->AccountNo }}">
+                    </div>
+                      
+                      
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="form-group">
+                  <label><em class="icon-remark"></em>Bank Name</label>
+                  <input type="text" id="BankName" class="form-control" placeholder="Enter Bank Name" name="BankName" value="{{ $data[0]->BankName }}">
+                </div>
+              </div>
+            </div>
+            
+          </div>
+            </form>
+        </div>
+      </div>
+     <?php }?>    
     </div>
   </div>
 

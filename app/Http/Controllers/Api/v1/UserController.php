@@ -48,8 +48,6 @@ class UserController extends Controller
         $inputData = Input::all();
         return $inputData;
     }
-    
-    
     public function verifyPassword () {
         $inputData = Input::all();
         $records = DB::table('clientlogin')
@@ -81,6 +79,7 @@ class UserController extends Controller
     public function profile ($CMId = NULL) {
         $records = ClientMasterModel::where('CMId',$CMId)->first();
         $records = collect($records)->all();
+        Session::get('client_session.0.0');
         if (!empty($records) && isset($records)) {
             $result = array (
                 'ERROR'         => false,
@@ -385,6 +384,84 @@ class UserController extends Controller
         return $result;    
     }
     
+    //start update application form client detail    
+    public function updateMyProfileAppForm (Request $request,$cmId = null) {
+        $inputData = Input::all();
+        $result = array ();
+        $rulesArr = array (
+//            'PanNo'             => '',
+            'AlternateMobileNo' => 'numeric',
+            'AlternateEmailId'  => 'email',
+            'City'              => '',
+            'Address'           => '',
+//            'PermanentCity'     => '',
+//            'PermanentAddress'  => '',
+//            'PINNo'             => '',
+            'CountryName'       => '',
+//            'PPINNo'            => '',
+//            'PCountryName'      => '',
+//            'OccupationType'    => '',
+//            'Designation'       => '',
+//            'CompanyName'       => ''
+        );
+        $validator = Validator::make($inputData,$rulesArr);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+        }
+        $postArr = array (
+//            'PanNo'             => $inputData[''],
+            'AlternateMobileNo' => $inputData['AlternateMobileNo'],
+            'AlternateEmailId'  => $inputData['AlternateEmailId'],
+            'City'              => $inputData['City'],
+            'Address'           => $inputData['Address'],
+            'PermanentCity'     => $inputData['PermanentCity'],
+            'PermanentAddress'  => $inputData['PermanentAddress'],
+            'PINNo'             => $inputData['PINNo'],
+            'CountryName'       => $inputData['CountryName'],
+            'PPINNo'            => $inputData['PPINNo'],
+            'PCountryName'      => $inputData['PCountryName'],
+            'OccupationType'    => $inputData['OccupationType'],
+            'Designation'       => $inputData['Designation'],
+            'CompanyName'       => $inputData['CompanyName'],
+            'GrossSalary'       => (float)$inputData['GrossSalary'],
+            'OtherIncome'       => (float)$inputData['OtherIncome'],
+            'EMIAmt'            => (float)$inputData['EMIAmt'],
+            'DOB'               => (isset($inputData['DOB']) && !empty($inputData['DOB']))?date('Y-m-d',strtotime($inputData['DOB'])):date('Y-m-d',strtotime('1900-01-01')),
+            'AnniversaryDate'   => (isset($inputData['AnniversaryDate']) && !empty($inputData['AnniversaryDate']))?date('Y-m-d',strtotime($inputData['AnniversaryDate'])):date('Y-m-d',strtotime('1900-01-01')),
+            'FBLink'            => $inputData['FBLink'],
+            'LinkedInLink'      => $inputData['LinkedInLink'],
+            'Remarks'           => $inputData['Remarks']
+        );
+        $records = ClientMasterModel::where('CMId',$cmId)
+                   ->update($postArr);
+        if (($records === 1)) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'Profile Updated Successfully',
+                    'RESPONSE_DATA' => $records
+                );
+            }else if ($records === 0) {
+                $result = array (
+                    'ERROR'         => false,
+                    'RESPONSE_MSG'  => 'You have not made any changes in form',
+                    'RESPONSE_DATA' => $records
+                );
+            }else {
+                $result = array (
+                    'ERROR'         => true,
+                    'RESPONSE_MSG'  => 'Error in profile update query',
+                    'RESPONSE_DATA' => ''
+                    );    
+            }
+        return $result;    
+    }
+    //end update application form client detail
     public function updateMyProfilePic (Request $request,$cmId = null) {
        $result = array(); 
        if (isset($cmId) && !empty($cmId)) { 
@@ -395,7 +472,7 @@ class UserController extends Controller
                 $result = array (
                     'ERROR'         => false,
                     'RESPONSE_MSG'  => 'Profile Image Changed Successfully',
-                    'RESPONSE_DATA' => array('fileName' => $inputData['CImage'], 'queryResult' => $result)
+                    'RESPONSE_DATA' => array('fileName' => $inputData['CancelledCheque'], 'queryResult' => $result)
                 );
             }
         }else {
@@ -815,5 +892,23 @@ class UserController extends Controller
        
         return $result;
     }
-    
+ 
+    //code for convertable note written by Vimlesh Rajput on 13/1/2017
+    public function displayAllInvestment () {
+        
+            $inputData = Input::all();
+            $records = array();
+            if (isset($inputData) && !empty($inputData)) {
+           //echo "<pre>";print_r($inputData);die;     
+        $records = DB::table('applicationform')
+                   //->where('clienttcfxref.ClientID',$inputData['ClientId'])
+                   ->whereRaw('applicationform.Phone='.$inputData['UserPhone'].')')
+                   ->join('applicationchequedetail')
+                   ->select('applicationform.Phone as Phone','applicationform.BookingNumber as BookingNumber')
+                   ->get();
+            return $records = collect($records)->all();
+        } 
+        
+        //return view('application.user.investments.my-investments')->with('data',$records);
+    }
 }

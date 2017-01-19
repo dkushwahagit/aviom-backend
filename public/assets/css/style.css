@@ -1,7 +1,3 @@
-*::-moz-scrollbar{width:8px; height:8px; background-color:rgba(255,255,255,0.1);position:absolute;z-index:10000;right:0}
-*::-moz-scrollbar-thumb{background-color:#BCBCBC; }
-*::-webkit-scrollbar{width:8px; height:8px; background-color:rgba(255,255,255,0.1);position:absolute;z-index:10000;}
-*::-webkit-scrollbar-thumb{background-color:#BCBCBC;}
 @font-face{font-family:'proxima_nova_rgbold';src:url(../fonts/proxima-nova-bold-webfont.woff2) format("woff2"),url(../fonts/proxima-nova-bold-webfont.woff) format("woff");font-weight:400;font-style:normal}
 @font-face{font-family:'proxima_nova_rgregular';src:url(../fonts/proxima-nova-regular-webfont.woff2) format("woff2"),url(../fonts/proxima-nova-regular-webfont.woff) format("woff");font-weight:400;font-style:normal}
 @font-face{font-family:'proxima_nova_ltsemibold';src:url(../fonts/proxima-nova-semibold-webfont.woff2) format("woff2"),url(../fonts/proxima-nova-semibold-webfont.woff) format("woff");font-weight:400;font-style:normal}
@@ -18,7 +14,7 @@ body{background:#f6f6f6}
 html,body{position:relative;height:100%}
 header{position:absolute;top:0;width:100%;z-index:99;transition:.5s;border-bottom:#e9e9e9 solid 1px;height:90px;background:#fff;-webkit-box-shadow:0 1px 10px 0 rgba(0,0,0,0.06);box-shadow:0 1px 10px 0 rgba(0,0,0,0.06)}
 header .logoBox{padding:14px 0;display:block}
-header .logoBox a{outline:none;display:inline-block;}
+header .logoBox a{outline:none}
 nav{padding:20px 0;display:block}
 nav ul{display:block}
 nav ul li{margin-bottom:10px;display:block;position:relative}
@@ -35,18 +31,27 @@ nav ul li.active{border-left:#e01963 solid 4px}
 .leftBox{padding-top:90px;background:#fff;width:350px;height:100%;position:absolute;top:0;left:0}
 .leftBox .userSection{padding:30px;display:block;border-bottom:#e5e5e5 solid 1px;text-align:center}
 .leftBox .userSection .userPic{display:block}
-.leftBox .userSection .userPic img{display:inline-block;border:#e01963 solid 3px;width:100px; height:100px;}
+.leftBox .userSection .userPic img{display:inline-block;border:#e01963 solid 3px;width:120px}
 .leftBox .userSection .userName{padding-top:15px;font-family:'proxima_nova_rgbold';display:block;text-transform:uppercase;font-size:18px}
 .rightBox{margin:90px 25px 25px;display:block}
 .rightBox h1{padding:30px 0;margin:auto;display:block;font-size:22px;color:#333;text-transform:uppercase}
+
+
 .rightBox .containerBox{padding:20px;background:#fff;min-height:300px;display:block;overflow:hidden}
+.rightBox .containerBox .panel-heading { display: block;}
+.rightBox .containerBox .panel-heading .clickBtn{ width: 35px; height: 35px; border-radius: 3px; background: #e73742;color: #fff; font-size: 20px; position: relative; text-align: center;}
+.rightBox .containerBox .panel-heading .clickBtn::after {content:''; position: absolute; color: #fff; font-size: 20px; font-family: 'fontAwesome'; left: 10px; top: 3px;transition: .3s; }
+.rightBox .containerBox .panel-heading .collapsed .clickBtn::after {content:''; position: absolute; color: #fff; font-size: 20px; font-family: 'fontAwesome'; left: 10px; top: 3px;transition: .3s; }
+.rightBox .containerBox .panel-heading p { font-size: 16px; text-align: left; margin: auto; margin-top: 5px; font-weight: bold;}
+
+
 .rightBox .containerBox .table{border:#fff solid 1px}
 .rightBox .containerBox .table tr th{background:#347ab6;border:#fff solid 1px;color:#fff;font-size:14px;font-weight:400;font-family:'proxima_nova_ltsemibold'}
 .rightBox .containerBox .table tr th:first-child,.rightBox .containerBox .table tr td:first-child{text-align:center}
-.rightBox .containerBox .table tr td{padding:0 15px;background:#f1f1f1;border:#fff solid 1px;color:#333;line-height:32px;font-size:13px; overflow: hidden}
+.rightBox .containerBox .table tr td{padding:0 15px;background:#f1f1f1;border:#fff solid 1px;color:#333;line-height:32px;font-size:13px; overflow:hidden;}
 .rightBox .containerBox .table tr td .table{box-shadow:0 3px 0 #787878}
 .rightBox .containerBox .table tr td tr th{background:#e01963}
-.rightBox .containerBox .table tr td tr td{background:#e6e5e5;}
+.rightBox .containerBox .table tr td tr td{background:#e6e5e5}
 footer{padding:15px 0;background:#333;display:block;position:relative;z-index:99}
 footer ul{display:block}
 footer ul li{padding:8px 15px;display:block;color:#c3c3c3;float:left;border-left:#484848 solid 1px}
@@ -55,7 +60,7 @@ footer ul li:first-child{padding-left:0;font-family:'proxima_nova_ltsemibold';bo
 footer ul li a{display:block;color:#c3c3c3}
 footer ul li a:hover{color:#fff;text-decoration:none}
 footer .copy{text-align:right;display:block;color:#c3c3c3;line-height:38px}
-.loginBox{padding:40px 0;margin-top:90px;display:block;background:#0098da url(../images/login-bg.png) no-repeat center bottom}
+.loginBox{padding:150px 0;margin-top:90px;display:block;background:#0098da url(../images/login-bg.png) no-repeat center bottom}
 .loginBox .box{margin:0 auto;width:400px;background:#fff;border-radius:3px}
 .loginBox .box .panelHeader{display:block;text-align:center;background:#5b2984;font-family:'proxima_nova_rgbold';color:#fff;line-height:55px;font-size:22px;border-radius:3px 3px 0 0}
 .loginBox .box .panelBody{display:block}
@@ -68,7 +73,7 @@ footer .copy{text-align:right;display:block;color:#c3c3c3;line-height:38px}
 .loginBox .box form .form-control{border-radius:3px;box-shadow:none;height:42px}
 .loginBox .box form .btn.btn-danger{padding:10px 25px;background:#bd245d!important;outline:none}
 .referralBox{margin:15px -15px 0;display:block}
-.referralBox .tile{margin:15px 1% 0;background:#fff;border-radius:3px;display:block;width:23%;float:left;border:#e4e4e4 solid 1px}
+.referralBox .tile{margin:15px 1% 15px;background:#fff;border-radius:3px;display:block;width:23%;float:left;border:#e4e4e4 solid 1px}
 .referralBox .tile:hover{box-shadow: 0px 0px 20px #f1f1f1;}
 .referralBox .tile .panelHeader{padding:5px 15px;border-bottom:#e4e4e4 solid 1px;overflow:hidden}
 .referralBox .tile .panelHeader h2{padding:0;margin:0;display:inline-block;font-size:18px;text-transform:uppercase;font-family:'proxima_nova_rgbold';color:#333;line-height:38px}
@@ -86,6 +91,12 @@ footer .copy{text-align:right;display:block;color:#c3c3c3;line-height:38px}
 .referralBox .tile .panelFooter ul.active li{margin-bottom:0;transition:.3s}
 .referralBox .tile .panelFooter ul.active li.moreTag.active{-ms-transform:rotate(180deg);-webkit-transform:rotate(180deg);transform:rotate(180deg);transition:.3s}
 .blankTile {min-height:150px; float:left; width:100%;}
+
+
+
+
+
+
 
 .modal-header{display:block;background:#5b2984;color:#fff;font-family:'proxima_nova_ltsemibold';border-radius:4px 4px 0 0}
 .modal-header .close{color:#b96bfa;opacity:.9;outline:none; box-shadow:none; font-size:25px;}

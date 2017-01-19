@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
+use DB;
 class UserController extends Controller
 {   
     /**
@@ -95,12 +95,43 @@ class UserController extends Controller
         //echo '<pre>';print_r(get_class_methods($resp)); exit;
         $clientMasterId = Session::get('client_session.0.0.CMId'); //client master id
         //print_r(Session::get('client_session'));exit;
-        if (isset($clientMasterId) && !empty($clientMasterId)) {
-            $result = self::apiRequest('/profile/'.$clientMasterId, 'GET');
-            
-            return view('application.user.profile')->with('data',$result);
-        }else {
-            return redirect('/');
+        if(Session::get('client_session.0.0.clientType') == 'BUYER'){
+            if (isset($clientMasterId) && !empty($clientMasterId)) {
+                $result = self::apiRequest('/profile/'.$clientMasterId, 'GET');
+
+                return view('application.user.profile')->with('data',$result);
+            }else {
+                return redirect('/');
+            }
+        }else{
+            $UserName = Session::get('client_session.0.0.UserName');
+            $records = DB::table('applicationform')
+                   //->where('clienttcfxref.ClientID',$inputData['ClientId']) 
+                   ->whereRaw("applicationform.Phone=$UserName")
+                   ->select('applicationform.BookingId','applicationform.BookingNumber','applicationform.InvestmentId','applicationform.CustomerName',
+                           'applicationform.CoApplicantName','applicationform.Phone','applicationform.AlternatePhone'
+                           ,'applicationform.Email','applicationform.Address','applicationform.City','applicationform.State','applicationform.Country','applicationform.CountryCode',
+                           'applicationform.PaymentRefNo','applicationform.PaymentProofDate','applicationform.PaymentAmount'
+                           ,'applicationform.UnitOfInvestment','applicationForm.TotalInvestment','applicationForm.BlockingAmount','applicationForm.AddrressProofDoc',
+                           'applicationForm.BankProofDoc','applicationForm.AccountName','applicationForm.AccountNo',
+                           'applicationForm.BankName','applicationForm.BankAddress','applicationForm.IBAN','applicationForm.SwiftCode','applicationForm.PassportNo'
+                           ,'applicationForm.Status','applicationForm.BalPaymentRefNo','applicationForm.BalPaymentProofDate','applicationForm.BalPaymentAmount',
+                           'applicationForm.BalPaymentProofDoc','applicationForm.SqyEntityId','applicationForm.CouponRate','applicationForm.DiscountedRate','applicationForm.EffectiveDate',
+                           'applicationForm.Maturity','applicationForm.PaymentReceived','applicationForm.ConversionRate','applicationForm.BankCurrency','applicationForm.CancelledChequeProofDoc',
+                           'applicationForm.CoAddrressProofDoc','applicationForm.CoIdProofDoc','applicationForm.BalReceived','applicationForm.CommunicationAddress','applicationForm.SqyEntityBankName',
+                           'applicationForm.ActualTotalInvestment','applicationForm.PDCCurrency','applicationForm.TransactionAdvice','applicationForm.AgreementMailSentOn',
+                           'applicationForm.AgreementMailSentBy','applicationForm.CRMRemarks','applicationForm.CorrespondenceAddressProofDoc','applicationForm.Waiver',
+                           'applicationForm.ACRemarks','applicationForm.ChequeDate')
+                   ->get();
+           //  $records = collect($records)->all();
+             //echo "<pre>";print_r($records);
+            $arrDataWithCnNO = array();
+            foreach($records as $data){
+                //echo $data->BookingId."<br>";
+              //  $arrDataWithCnNO['allChqDetail'][$data->BookingNumber][] = $data;
+            }
+            return view('application.user.profile')->with('data',$records);
+           // return view('application.user.investments.my-investments')->with('data',$arrDataWithCnNO);
         }
     }
     /**
@@ -178,7 +209,7 @@ class UserController extends Controller
         $cmId = Session::get('client_session.0.0.CMId');
         if ($request->ajax()) {
             $inputData = Input::all();
-            //print_r($inputData); exit();
+            print_r($inputData); exit();
             if (isset($cmId) && !empty($cmId)) {
                 $result = self::apiRequest('/update-my-profile/'.$cmId, 'PUT', $inputData);
                  if ($result['ERROR'] == false) {
@@ -191,7 +222,25 @@ class UserController extends Controller
             }
         }
     }
-    
+    //code for application form client detail 
+    public function updateMyProfileAppForm (Request $request) {
+        $cmId = Session::get('client_session.0.0.CMId');
+        if ($request->ajax()) {
+            $inputData = Input::all();
+            print_r($inputData); exit();
+            if (isset($cmId) && !empty($cmId)) {
+                $result = self::apiRequest('/update-my-profile-app-form/'.$cmId, 'PUT', $inputData);
+                 if ($result['ERROR'] == false) {
+                        Session::forget('client_session.0.0.City');
+                        Session::forget('client_session.0.0.CountryName');
+                        Session::put('client_session.0.0.City',$inputData['City']);
+                        Session::put('client_session.0.0.CountryName',$inputData['CountryName']);
+                 }
+                return $result;
+            }
+        }
+    }
+    // end code for application form client detail
     public function updateMyProfilePic (Request $request) {
         $cmId = Session::get('client_session.0.0.CMId');
         $inputData = Input::all();     
@@ -223,6 +272,39 @@ class UserController extends Controller
             }
         }
     }
+    
+    public function updateCancelledCheque (Request $request) {
+        $cmId = Session::get('client_session.0.0.CMId');
+        $inputData = Input::all();     
+        if ($request->ajax()) {
+            if(Input::hasFile('CImage')) {
+                $fileObj = Input::file('CImage');
+                $ruleArr = array('CImage' => 'mimes:jpeg,bmp,png,gif|min:5|max:2048');
+                $validator = Validator::make($inputData, $ruleArr);
+                
+                if ($validator->fails())
+                 {
+                   $errors = $validator->errors();
+                    $result = array (
+                        'ERROR'         => true,
+                        'RESPONSE_MSG'  => $errors,
+                        'RESPONSE_DATA' => ''
+                    );
+                    return $result;
+                 }else {
+                       $location = config('app.AWS_PROFILE_BUCKET');
+                       $fileName = self::uploadFiles($fileObj,$cmId,$location);
+                    if (isset($fileName) && !empty($fileName)) {
+                        $result = self::apiRequest('/update-my-profile-pic/'.$cmId, 'POST', array('CImage' => $fileName));
+                        Session::forget('client_session.0.0.CImage');
+                        Session::put('client_session.0.0.CImage',$result['RESPONSE_DATA']['fileName']);
+                        return $result;
+                    }
+                }    
+            }
+        }
+    }
+    
     
     public function displayExclusiveDeals ($cityid = null) {
          $result = self::apiRequest('/exclusive-deals', 'GET',array('cityid' => $cityid, 'limit' => '12'));
@@ -423,14 +505,28 @@ class UserController extends Controller
     }
 
 
-    public function displayMyAllInvestments() {
-        $ClientId = Session::get('client_session.0.0.ClientId'); //client id
-        
-        if (isset($ClientId) && !empty($ClientId)) {
-            $result = self::apiRequest('/my-investments', 'GET', array('ClientId' => $ClientId));
-            return view('application.user.investments.my-investments')->with('data',$result);
-        }else {
-            return redirect('/logout');
-        }
+    public function displayMyAllInvestments(Request $request) {
+      //  echo "<pre>";
+               // print_r($request);die;
+        $UserName = Session::get('client_session.0.0.UserName'); //client id
+        $records = DB::table('applicationform')
+                   //->where('clienttcfxref.ClientID',$inputData['ClientId'])
+                   ->whereRaw("applicationform.Phone=$UserName")
+                   ->join('applicationchequedetail','applicationform.Id', '=', 'applicationchequedetail.ApplicationId')
+                   ->select('applicationform.BookingId','applicationform.BookingNumber','applicationform.InvestmentId','applicationform.CustomerName','applicationform.Phone'
+                           ,'applicationform.Email','applicationform.Address','applicationform.City','applicationform.State','applicationform.Country','applicationform.PaymentAmount'
+                           ,'applicationform.UnitOfInvestment','applicationchequedetail.ChequeNo','applicationchequedetail.ChequeDate','applicationchequedetail.Amount as appChque_amount',
+                           'applicationchequedetail.Period as Period','applicationchequedetail.InterestPaidOn as InterestPaidOn','applicationchequedetail.CancelledChequeReceived as CancelledChequeReceived',
+                           'applicationchequedetail.ChequeSNo as ChequeSNo','applicationform.ActualTotalInvestment')
+                   ->get();
+           //  $records = collect($records)->all();
+             //echo "<pre>";print_r($records);
+            $arrDataWithCnNO = array();
+            foreach($records as $data){
+                //echo $data->BookingId."<br>";
+                $arrDataWithCnNO['allChqDetail'][$data->BookingNumber][] = $data;
+                $arrDataWithCnNO['ActualInvestmentInUSD'][$data->BookingNumber] = $data->ActualTotalInvestment;
+            }
+            return view('application.user.investments.my-investments')->with('data',$arrDataWithCnNO);
     }
 }
