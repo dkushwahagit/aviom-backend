@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class UserController extends Controller
 {   
@@ -52,7 +53,6 @@ class UserController extends Controller
                     'password'  => 'required'
                 );
                 $validator = Validator::make($inputData,$rules); //validating user inputs
-
                 if ($validator->fails()) {
                     return redirect('/')->withErrors($validator)->withInput();
                 }else {
@@ -149,9 +149,12 @@ class UserController extends Controller
     
     public function displayMyLoan (Request $request) {
         $ClientId = Session::get('client_session.0.0.ClientId'); //client id
-        
+       // echo "I am in web front usercontroller displayMyLoan function";
+        //die;
         if (isset($ClientId) && !empty($ClientId)) {
-            $result = self::apiRequest('/my-loans', 'GET', array('ClientId' => $ClientId));
+         //   print_r($ClientId);
+           // die;
+                $result = self::apiRequest('/my-loans', 'GET', array('ClientId' => $ClientId));
             return view('application.user.my-loans')->with('data',$result);
         }else {
             return redirect('/logout');
@@ -256,6 +259,8 @@ class UserController extends Controller
     }
     
     public function generateServiceRequest () {
+      //  echo "I am in first line of generateServiceRequest";
+        //die;
         $ClientId = Session::get('client_session.0.0.ClientId'); //client id
         $cmId = Session::get('client_session.0.0.CMId');
         $postData = Input::all();
@@ -296,9 +301,29 @@ class UserController extends Controller
             'MRefCIId'            => '0',
             'LoginType'           => 'C'
         );
-        
+       
         $result = self::apiRequest('/generate-service-ticket', 'POST', $inputData);
         if ($result['ERROR'] === false) {
+           $clientDetail = DB::select("SELECT c.Name, c.MobileNo FROM client c WHERE c.ClientId = $inputData[ClientId]");
+           $data = array_map(function($object){
+                return (array) $object;
+            }, $clientDetail);
+            //print_r($data);
+            //echo $ClientName = $data[0]['Name'];
+            //die;
+            $to = array('soni.mangla@squareyards.co.in');
+            //$body = array('hi');
+            $ClientName = $data[0]['Name'];
+            $ClientContact = $data[0]['MobileNo'];
+            $ServiceRequest = $inputData['ReqSubject'];
+            $ServiceRequestDetail = $inputData['InteractionDetails'];
+            $TicketNum = $inputData['TicketNo'];
+            $mailArray = array (
+                    'to'      => $to,
+                    'subject' => "$TicketNum | New Service Request have been Submitted",
+                    'body'    => "Team CRM,<br/><p>New Service Request have been Submitted</p><table border='1'><tr><td width='40%' style='padding:3px'>Client Name</td><td style='padding:3px' width='60%'>$ClientName</td></tr><tr><td style='padding:3px'>Contact Number</td><td style='padding:3px'>$ClientContact</td></tr><tr><td style='padding:3px'>Service Request</td><td style='padding:3px'>$ServiceRequest</td></tr><tr><td style='padding:3px'>Request Detail</td><td style='padding:3px'>$ServiceRequestDetail</td></tr></table><br/><p><a href='#'>Click Here for Taking Next Action</a></p><br/> Team SquareYards"
+                );
+                self::sendEmail($mailArray);
               return redirect('/service-request-list')->with('success', $result['RESPONSE_MSG']);
         }else {
             return redirect('/service-request-list')->with('error', $result['RESPONSE_MSG']);

@@ -52,6 +52,7 @@ class UserController extends Controller
     
     public function verifyPassword () {
         $inputData = Input::all();
+
         $records = DB::table('clientlogin')
                    ->where('clientlogin.UserName',$inputData['username'])
                    ->where('clientlogin.IsActive',1)
@@ -192,11 +193,15 @@ class UserController extends Controller
     }
     
     public function displayMyLoan () {
+     // echo "I am in my mcf query1";
+      //die;
         $inputData = Input::all();
         $records = array();
         if (isset($inputData) && !empty($inputData)) {
-        
-        $mcf_records = DB::table('mcf')
+
+       // print_r($inputData);
+       // die;
+      /*  $mcf_records = DB::table('mcf')
                    ->whereRaw('ifnull(mcfclient.CMId,0)=ifnull((Select CMId From client where ClientID='.$inputData['ClientId'].'),0)'
                            . 'AND IFNULL(mcfclient.CRMLeadID,"") != "" AND ifnull(lead.TCFId,0)=0 AND ifnull(mcfclient.CMId,0)!=0')
                    ->join('bank','bank.BankId','=','mcf.BankId')
@@ -205,28 +210,56 @@ class UserController extends Controller
                    ->join('lead','lead.LeadID','=','mcfclient.CRMLeadID')
                    ->select('mcf.MCFID As mcfId','mcfclient.Name','bank.BankName As bankName','mcf.MCFSubmissionDate As mcfSubmissionDate','mcf.LoanAmount As loanAmount',
                            'mcf.SanctionedAmount As sanctionedAmount','mcf.status As status');    
-        $query = $mcf_records->toSql();  
+        $query = $mcf_records->toSql();  */
         //return $query;
         
-        $records = DB::select("select mcf.MCFID As mcfId,mcfclient.Name,bank.BankName As bankName,
-                               mcf.MCFSubmissionDate As mcfSubmissionDate,mcf.LoanAmount As loanAmount,
-                           mcf.SanctionedAmount As sanctionedAmount,mcf.status As status from mcf "
-                . " INNER JOIN bank on bank.BankId = mcf.BankId "
-                . " INNER JOIN mcfclientxref on mcfclientxref.MCFID = mcf.MCFID "
-                . " INNER JOIN mcfclient on mcfclientxref.ClientID = mcfclient.ClientID "
-                . " INNER JOIN lead l ON l.LeadID=mcfclient.CRMLeadID AND ifnull(l.TCFId,0)!=0 "
-                . " INNER JOIN  (Select t.TCFId,l.LeadId From client c "
-                                  . " INNER JOIN clienttcfxref ct ON c.ClientID = ct.ClientID AND ifnull(c.CRMLeadID,'')!='' "
-                                  . " INNER JOIN tcf t ON ct.TCFId=t.TCFId "
-                                  . " INNER JOIN lead l on l.TCFId=t.TCFId "
-                                  . " where c.ClientID=Case When ifnull((Select CMId From client where ClientID=".$inputData['ClientId']."),0)=0 Then ".$inputData['ClientId']." Else c.ClientID End "
-                . " AND ifnull(c.CMId,0)=Case When ifnull((Select CMId From client where ClientID=".$inputData['ClientId']."),0)!=0 Then ".$inputData['ClientId']. " Else ifnull(c.CMId,0) End "
-                . " ) t on ifnull(mcfclient.CRMLeadID,'')=t.LeadId Where ifnull(mcfclient.CMId,0)=0 UNION $query order by mcfSubmissionDate,Name");
+        $records = DB::select("SELECT "
+                                  ."m.MCFRefrenceId,"
+                                  ."mc.Name,"
+                                  ."b.BankName,"
+                                  ."DATE_FORMAT(m.MCFSubmissionDate,'%d %b %y') AS MCFSubmissionDate,"
+                                  ."m.LoanROI,"
+                                  ."m.LoanAmount,"
+                                  ."m.DisbursementAmount,"
+                                  ."m.SanctionedAmount,"
+                                  ."m.Status "
+                              ."FROM "
+                                  ."tcf t "
+                                      ."INNER JOIN "
+                                  ."clienttcfxref ct ON t.TCFID = ct.TCFID "
+                                      ."INNER JOIN "
+                                  ."tcfstatus tss ON t.TCFID = tss.TCFID "
+                                      ."AND tss.TCFStatusName = 'SUBMITTED' "
+                                      ."INNER JOIN "
+                                  ."lead lm ON t.TCFID = lm.TCFID AND lm.SegmentID = 9 "
+                                      ."INNER JOIN "
+                                  ."mcfclient mc ON mc.CRMLeadID = lm.LeadID "
+                                      ."INNER JOIN "
+                                  ."mcfclientxref mt ON mt.ClientID = mc.ClientID "
+                                      ."INNER JOIN "
+                                  ."mcf m ON m.MCFID = mt.MCFID "
+                                      ."INNER JOIN "
+                                  ."bank b ON b.BankId = m.BankId "
+                                      ."INNER JOIN "
+                                  ."mcfstatus s ON s.MCFID = m.MCFID "
+                                      ."AND s.MCFStatusName = 'DISBURSEDCONFIRMED' "
+                                      ."AND s.CreatedOn = (SELECT  "
+                                          ."MIN(ss.CreatedOn) "
+                                      ."FROM "
+                                          ."mcfstatus ss "
+                                      ."WHERE "
+                                          ."s.MCFID = ss.MCFID "
+                                              ."AND ss.MCFStatusName = 'DISBURSEDCONFIRMED') "
+                              ."where ct.ClientID=".$inputData['ClientId']. "
+                                    AND tss.TCFStatusName <> 'DELETED'");
                         
         
                    //->union($mcf_records);
                    //->get();
         //return $records->toSql(); 
+            //echo "I am in my mcf query";
+            //print_r($records);
+            //die;
             $records = collect($records)->all();
             if (!empty($records) && isset($records)) {
                 $result = array (
@@ -597,8 +630,7 @@ class UserController extends Controller
         $records = DB::table('clientinteraction')->insertGetId($inputData);
         $msg = 'Ticket Generated Successfully';
         if ($inputData['RefCIId'] != '0') {
-            $refCIId = $inputData['RefCIId'];
-                      
+            $refCIId = $inputData['RefCIId'];       
             $records = DB::table('clientinteraction')->where('clientinteraction.CIId',$refCIId)->update(['IStatus' => 'C']);
             $msg = 'Message Sent Successfully';
         }

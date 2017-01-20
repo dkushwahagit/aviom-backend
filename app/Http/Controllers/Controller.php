@@ -90,12 +90,22 @@ abstract class Controller extends BaseController
          *               'body'   => string 
          *           );
          */
+               // die;
         try {
             if (is_array($mailArray)) {
-                
+                echo "I am in sendemail fumction";
+               // die;
                 $sent = Mail::send([], [], function($message) use ($mailArray) {
+                    //echo "i am in sent";
+
+                    echo "mail array";
+                    print_r($mailArray);
                    if (isset($mailArray['to']) && !empty($mailArray['to'])) { 
+                    echo "inside to";
+                    print_r($mailArray['to']);
                     $to = implode(',',$mailArray['to']);
+                    print_r($mailArray);
+                    echo "after implode";
                    }
                    if (isset($mailArray['cc']) && !empty($mailArray['cc'])) { 
                     $cc = implode(',',$mailArray['cc']);
@@ -103,15 +113,19 @@ abstract class Controller extends BaseController
                    if (isset($mailArray['bcc']) && !empty($mailArray['bcc'])) { 
                     $bcc = implode(',',$mailArray['bcc']);
                    }
+                   echo "after bcc";
                     $message->to($to)
                         ->subject($mailArray['subject'])
                         ->setBody($mailArray['body'], 'text/html');
                 });
                 
+                echo "Sent success";
             } else {
 
             }
         } catch(\Exception $e) {
+            echo $e->getMessage();
+            die;
             return $e->getMessage();
         }
     }
