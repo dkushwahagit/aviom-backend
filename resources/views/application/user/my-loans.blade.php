@@ -17,11 +17,14 @@
           <thead>
             <tr>
               <th>#</th>
+              <!--<th>MCFRefId</th>-->
               <th>Customer Name</th>
               <th>Bank</th>
               <th>Date</th>
+              <th>ROI</th>
               <th>Loan Amount</th>
               <th>Sanctioned Amount</th>
+              <th>Disbursed Amount</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -30,12 +33,15 @@
         
             <tr>
               <td>{{++$k}}</td>
+              <!--<td>{{ $v['MCFRefrenceId'] }}</td>-->
               <td>{{ $v['Name'] }}</td>
-              <td>{{ $v['bankName'] }}</td>
-              <td>{{ $v['mcfSubmissionDate'] }}</td>
-              <td>{{ $v['loanAmount'] or '0' }}</td>
-              <td>{{ $v['sanctionedAmount'] or '0' }}</td>
-              <td>{{ $v['status'] }}</td>
+              <td>{{ $v['BankName'] }}</td>
+              <td>{{ $v['MCFSubmissionDate'] }}</td>
+              <td>{{ $v['LoanROI'] }}</td>
+              <td>{{ $v['LoanAmount'] or '0' }}</td>
+              <td>{{ $v['SanctionedAmount'] or '0' }}</td>
+              <td>{{ $v['DisbursementAmount'] or '0' }}</td>
+              <td>{{ $v['Status'] }}</td>
             </tr>
                    
              @endforeach
