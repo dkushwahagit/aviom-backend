@@ -118,7 +118,6 @@ $(function(){
     });
     
     $('a.profile-btn').click(function () {
-        
                 $.fn.loader('open');
                 var postDataObj = {};
                 var formObj = $('#profile-form').serialize();
@@ -130,7 +129,7 @@ $(function(){
                 if ($('#Profiling').val() != '') {
                     $('#profile-pic-form').submit().delay(1000);
                  }
-                //alert(formObj+"<>here");
+                
                 //return false;
                 //console.log(postDataObj);
                 
@@ -166,56 +165,6 @@ $(function(){
                 });
              
     });
-    
-    //start code for application form client profile upade
-    $('a.profile-btn-app-form').click(function () {
-       // alert("here");
-                $.fn.loader('open');
-                var postDataObj = {};
-                var formObj = $('#profile-form-app-form').serialize();
-               /* $(formObj).each(function (index,v) {
-                         postDataObj[v.name] = v.value;
-                }); */
-                var modalBody = $('div#msg div.modal-body');
-                $(modalBody).html('');
-                
-                alert(formObj+"<>here"+siteUrl);
-                //return false;
-                //console.log(postDataObj);
-                
-                $.ajax({
-                    async      : false,
-                    type       : 'PUT',
-                    url        : siteUrl+'/update-my-profile-app-form',
-                    data       : formObj,
-                    beforeSend : function () {},
-                    success    : function (data,statusText,jqXHR) { 
-                                alert("here"+data);
-                                $.fn.loader('close');
-                                    if (data.ERROR === false) {
-                                        var msg = '<div class="alert alert-success">Application Form Profile Updated Successfully. </div>';
-                                        $(msg).appendTo(modalBody);
-                                        $('#msg').modal();
-                                       setTimeout(function () { window.location.reload(); },2000);
-                                    }
-                                    
-                                    if (data.ERROR === true) {
-                                        var msg = '<ul class="alert alert-danger">'; 
-                                        $.each(data['RESPONSE_MSG'],function (k,v) {
-                                            msg = msg + '<li>'+v[0]+'ffdfdsfdsfds</li>';
-                                        });
-                                        msg = msg + 'gfhgfhgfhgf</ul>';
-                                        $(msg).appendTo(modalBody);
-                                        $('#msg').modal();
-                                        
-                                    }
-                                    
-                    },
-                    error      : function (jqXHR,statusText,errorThrown) {alert(errorThrown);},
-                });
-             
-    });
-    //end code for application form client profile upade
     
     $('div.cameraIcon').click(function (e) {
       $('#Profiling').click();

@@ -20,7 +20,6 @@ Route::group(['prefix' => 'Api/v1'], function () {
     Route::get('/my-loans', 'UserController@displayMyLoan');
     Route::get('/my-credit-notes', 'UserController@displayMyCreditNotes');
     Route::put('/update-my-profile/{cmId}', 'UserController@updateMyProfile');
-    Route::put('/update-my-profile-app-form/{cmId}', 'UserController@updateMyProfileAppForm');
     Route::post('/update-my-profile-pic/{cmId}','UserController@updateMyProfilePic');
     Route::get('/exclusive-deals', 'UserController@displayExclusiveDeals');
     Route::get('/city-list', 'UserController@cityList');

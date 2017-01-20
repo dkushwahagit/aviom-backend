@@ -222,25 +222,6 @@ class UserController extends Controller
             }
         }
     }
-    //code for application form client detail 
-    public function updateMyProfileAppForm (Request $request) {
-        $cmId = Session::get('client_session.0.0.CMId');
-        if ($request->ajax()) {
-            $inputData = Input::all();
-            print_r($inputData); exit();
-            if (isset($cmId) && !empty($cmId)) {
-                $result = self::apiRequest('/update-my-profile-app-form/'.$cmId, 'PUT', $inputData);
-                 if ($result['ERROR'] == false) {
-                        Session::forget('client_session.0.0.City');
-                        Session::forget('client_session.0.0.CountryName');
-                        Session::put('client_session.0.0.City',$inputData['City']);
-                        Session::put('client_session.0.0.CountryName',$inputData['CountryName']);
-                 }
-                return $result;
-            }
-        }
-    }
-    // end code for application form client detail
     public function updateMyProfilePic (Request $request) {
         $cmId = Session::get('client_session.0.0.CMId');
         $inputData = Input::all();     
